@@ -4,14 +4,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JK Lakshmi Cement - Vehicle Requisition Management System</title>
+  <title>Bennett University - Campus Transport Management System</title>
   <!-- SEO Meta Tags -->
   <meta name="description"
-    content="Manage and allocate corporate vehicle requests dynamically for JK Lakshmi Cement plants, employees, and logistics operations.">
+    content="Manage and allocate campus vehicle requests for Bennett University faculty, departments, and transport operations.">
   <meta name="keywords"
-    content="Fleet Management, Vehicle Requisition, Corporate Logistics, Plant Transport, JK Lakshmi Cement">
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="style.css">
+    content="Campus Transport, Vehicle Requisition, Bennett University, Faculty Transport, Fleet Management">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=3.0.0">
+  
+  <script>
+    window.addEventListener('error', function(e) {
+      if (document.body) {
+        const errDiv = document.createElement('div');
+        errDiv.style.cssText = 'position:fixed; top:0; left:0; width:100%; background:red; color:white; padding:10px; z-index:9999;';
+        errDiv.innerText = "JS Error: " + e.message + " in " + e.filename + " at line " + e.lineno;
+        document.body.prepend(errDiv);
+      } else {
+        alert("JS Error: " + e.message + " in " + e.filename + " at line " + e.lineno);
+      }
+    });
+  </script>
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js for reports -->
@@ -26,22 +39,21 @@
   <!-- Login Container Wrapper -->
   <div class="login-wrapper" id="login-wrapper">
     <div class="login-card glass-card">
-      <div class="login-logo-area" style="flex-direction: column; align-items: center; gap: 8px;">
-        <img src="assets/jklc new logo.avif" alt="JK Lakshmi Cement" style="width: 150px; height: 85px; object-fit: contain; border-radius: 8px; background: #ffffff; padding: 6px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); margin-bottom: 5px;">
-        <span style="font-weight: bold; font-size: 16px; font-family: 'Times New Roman', Times, serif; color: var(--text-main); text-transform: uppercase; letter-spacing: 1.5px;">Vehicle Portal</span>
+      <div class="login-logo-area" style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+        <img src="assets/bennett-campus-transport-logo.png" alt="Bennett University Campus Transport" style="max-width: 140px; width: 100%; height: auto;">
       </div>
 
       <div class="login-header">
-        <h1>Smart Vehicle Requisition System</h1>
-        <p>Corporate Transportation Management Platform</p>
+        <h1>Campus Transport Management System</h1>
+        <p>Streamlined Faculty & Staff Transportation Platform</p>
       </div>
 
-      <form id="login-form" onsubmit="handleLoginSubmit(event)">
+      <form id="login-form" onsubmit="if(typeof handleLoginSubmit === 'function') { handleLoginSubmit(event); } else { alert('Error: Login script did not load properly. Please check for JS errors.'); } return false;">
         <div class="form-group" style="display: flex; flex-direction: column; gap: 8px;">
-          <label for="login-username">Employee ID <span style="color: var(--danger)">*</span></label>
+          <label for="login-username">User ID <span style="color: var(--danger)">*</span></label>
           <div class="input-with-icon">
             <i class="fa-solid fa-user"></i>
-            <input type="text" id="login-username" class="form-control" placeholder="Enter Employee ID">
+            <input type="text" id="login-username" class="form-control" placeholder="Enter User ID">
           </div>
         </div>
 
@@ -61,12 +73,104 @@
           <button type="submit" class="btn btn-primary btn-block login-btn-main">
             <i class="fa-solid fa-right-to-bracket"></i> Sign In
           </button>
+          <div style="text-align: center; margin-top: 15px;">
+            <span style="color: var(--text-muted); font-size: 14px;">New employee? </span>
+            <a href="#" onclick="showRegisterPage(event)" style="color: var(--primary-color); font-weight: 600; text-decoration: none;">Register here</a>
+          </div>
         </div>
       </form>
 
       <div class="login-footer" style="margin-top: 16px;">
-        <p>&copy; 2026 JK Lakshmi Cement Ltd. All Rights Reserved.</p>
+        <p>&copy; 2026 Bennett University. All Rights Reserved.</p>
       </div>
+    </div>
+  </div>
+
+  <!-- Registration Container Wrapper -->
+  <div class="login-wrapper" id="register-wrapper" style="display: none;">
+    <div class="login-card glass-card">
+      <div class="login-logo-area" style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+        <img src="assets/bennett-campus-transport-logo.png" alt="Bennett University Campus Transport" style="max-width: 140px; width: 100%; height: auto;">
+      </div>
+
+      <div class="login-header">
+        <h1>Employee Registration</h1>
+        <p>Create your Campus Transport Management System account</p>
+      </div>
+
+      <form id="register-form" onsubmit="handleRegisterSubmit(event)">
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 8px;">
+          <label for="reg-employee-id">EMPLOYEE ID <span style="color: var(--danger)">*</span></label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-id-card"></i>
+            <input type="text" id="reg-employee-id" class="form-control" placeholder="Enter Employee ID" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+          <label for="reg-employee-name">EMPLOYEE NAME <span style="color: var(--danger)">*</span></label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="reg-employee-name" class="form-control" placeholder="Enter Full Name" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+          <label for="reg-department">DEPARTMENT <span style="color: var(--danger)">*</span></label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-building"></i>
+            <input type="text" id="reg-department" class="form-control" placeholder="Enter Department" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+          <label for="reg-designation">DESIGNATION <span style="color: var(--danger)">*</span></label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-briefcase"></i>
+            <input type="text" id="reg-designation" class="form-control" placeholder="Enter Designation" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+          <label for="reg-role">ROLE <span style="color: var(--danger)">*</span></label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-user-tag"></i>
+            <select id="reg-role" class="form-control" required style="padding-left: 40px;">
+              <option value="" disabled selected>Select Role</option>
+              <option value="Faculty">Faculty</option>
+              <option value="Driver">Driver</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+          <label for="reg-password">PASSWORD <span style="color: var(--danger)">*</span></label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="reg-password" class="form-control" placeholder="Create Password" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+          <label for="reg-mobile">MOBILE <span style="color: var(--danger)">*</span></label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-phone"></i>
+            <input type="tel" id="reg-mobile" class="form-control" placeholder="Enter Mobile Number" pattern="[0-9]{10}" maxlength="10" required>
+          </div>
+        </div>
+
+        <div class="validation-error" id="register-error-msg" style="display: none; margin-top: 16px;"></div>
+
+        <div class="login-actions" style="margin-top: 24px;">
+          <button type="submit" class="btn btn-primary btn-block" id="register-btn-main">
+            <i class="fa-solid fa-user-plus"></i> Register
+          </button>
+          <div style="text-align: center; margin-top: 15px;">
+            <span style="color: var(--text-muted); font-size: 14px;">Already registered? </span>
+            <a href="#" onclick="showLoginPage(event)" style="color: var(--primary-color); font-weight: 600; text-decoration: none;">Back to Login</a>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -77,14 +181,8 @@
     <!-- Sidebar Navigation -->
     <aside class="sidebar" id="app-sidebar">
       <div class="sidebar-header">
-        <!-- <div class="logo-container">JK</div> -->
-        <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-          <!-- <h2 class="logo-text">JK Lakshmi</h2>  -->
-          <img src="assets/jklc new logo.avif" alt="JK Lakshmi"
-            style="width: 160px; height: 90px; object-fit: contain; border-radius: 8px; background: #ffffff; padding: 6px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); display: block; margin-bottom: 8px;">
-          <span
-            style="text-align: center; font-weight: bold; font-size: 20px; font-family:'Times New Roman', Times, serif; letter-spacing: 1px;"
-            class="logo-subtitle">Vehicle Portal</span>
+        <div style="display: flex; justify-content: center; align-items: center; width: 100%; padding: 10px 0;">
+          <img src="assets/bennett-campus-transport-logo.png" alt="Bennett University Transport Management" style="max-width: 100px; height: auto; border-radius: 4px;">
         </div>
       </div>
 
@@ -119,8 +217,8 @@
         <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120"
           alt="User Profile" class="user-avatar-small">
         <div class="user-info-sidebar">
-          <div class="user-name-sb">Anoop Kumar</div>
-          <div class="user-role-sb">General Manager - Operations</div>
+          <div class="user-name-sb">Faculty User</div>
+          <div class="user-role-sb">Bennett University</div>
         </div>
         <div class="logout-btn-sb" id="btn-logout" title="Logout">
           <i class="fa-solid fa-right-from-bracket"></i>
@@ -139,6 +237,11 @@
         </button>
         <div class="page-title-area">
           <h1 id="current-view-title">Dashboard Overview</h1>
+        </div>
+
+        <div class="header-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Search requests, vehicles..." />
         </div>
 
         <div class="top-nav-actions">
@@ -176,8 +279,8 @@
 
           <!-- Centered Dashboard Title -->
           <div class="dashboard-center-title">
-            <h1>Smart Vehicle Requisition System</h1>
-            <p>Streamlining Corporate Transportation with Intelligent Vehicle Allocation and Fleet Efficiency.</p>
+            <h1>Campus Transport Management System</h1>
+            <p>Streamlining Bennett University Transportation with Intelligent Vehicle Allocation and Fleet Efficiency.</p>
           </div>
 
           <!-- Statistics Grid -->
@@ -231,7 +334,7 @@
                 <i class="fa-solid fa-arrow-right action-card-arrow"></i>
               </div>
               <h3>New Vehicle Request</h3>
-              <p>Submit a brand new request for employee travel, official visits, or emergency transit allocations.</p>
+              <p>Submit a new request for faculty travel, official visits, or campus transit allocations.</p>
             </div>
 
             <div class="action-card glass-card action-requests" onclick="switchView('workflow')">
@@ -249,7 +352,7 @@
                 <i class="fa-solid fa-arrow-right action-card-arrow"></i>
               </div>
               <h3>Approvals Pending</h3>
-              <p>Review and action pending transportation requisitions submitted by team members.</p>
+              <p>Review and action pending transportation requisitions submitted by department faculty.</p>
             </div>
 
             <div class="action-card glass-card action-analytics" onclick="switchView('analytics')">
@@ -258,7 +361,7 @@
                 <i class="fa-solid fa-arrow-right action-card-arrow"></i>
               </div>
               <h3>Reports & Analytics</h3>
-              <p>Investigate usage patterns, department logs, vehicle utilization charts, and travel expenses.</p>
+              <p>Investigate usage patterns, department logs, vehicle utilization charts, and campus travel data.</p>
             </div>
           </div>
 
@@ -330,18 +433,17 @@
 
               <div class="form-grid">
 
-                <!-- Plant Location -->
+                <!-- Campus Location -->
                 <div class="form-group">
-                  <label for="req-plant-location">Plant / Office Location <span
+                  <label for="req-plant-location">Campus Location <span
                       style="color:var(--danger)">*</span></label>
                   <select id="req-plant-location" class="form-control" required>
                     <option value="" disabled selected>Select Location</option>
-                    <option value="Sirohi Plant">Sirohi Plant</option>
-                    <option value="Uchahar Plant">Uchahar Plant</option>
-                    <option value="Surat Plant">Surat Plant</option>
-                    <option value="Kalol Plant">Kalol Plant</option>
-                    <option value="Jharli Plant">Jharli Plant</option>
-                    <option value="Corporate Office">Corporate Office</option>
+                    <option value="Bennett University">Bennett University - Main Campus</option>
+                    <option value="Tech Park">Tech Park</option>
+                    <option value="Hostel Block">Hostel Block</option>
+                    <option value="Admin Block">Administration Block</option>
+                    <option value="Academic Block">Academic Block</option>
                   </select>
                 </div>
 
@@ -361,6 +463,25 @@
                   <label for="req-category">Category <span style="color:var(--danger)">*</span></label>
                   <select id="req-category" class="form-control" required onchange="calculateSmartMetrics()">
                     <option value="" disabled selected>Select Category</option>
+                    <option value="Industrial Visit">Industrial Visit</option>
+                    <option value="Hackathon / Technical Competition">Hackathon / Technical Competition</option>
+                    <option value="Research Visit">Research Visit</option>
+                    <option value="Conference / Seminar">Conference / Seminar</option>
+                    <option value="Faculty Official Duty">Faculty Official Duty</option>
+                    <option value="Placement Drive">Placement Drive</option>
+                    <option value="Guest Pickup / Drop">Guest Pickup / Drop</option>
+                    <option value="Academic Collaboration Visit">Academic Collaboration Visit</option>
+                    <option value="Workshop / FDP">Workshop / FDP</option>
+                    <option value="Club Event">Club Event</option>
+                    <option value="Cultural Event">Cultural Event</option>
+                    <option value="Sports Tournament">Sports Tournament</option>
+                    <option value="NSS / Social Outreach Program">NSS / Social Outreach Program</option>
+                    <option value="Examination Duty">Examination Duty</option>
+                    <option value="University Administration Work">University Administration Work</option>
+                    <option value="Airport / Railway Station Pickup">Airport / Railway Station Pickup</option>
+                    <option value="Medical Emergency">Medical Emergency</option>
+                    <option value="Maintenance & Logistics">Maintenance & Logistics</option>
+                    <option value="Other Official Purpose">Other Official Purpose</option>
                   </select>
                 </div>
 
@@ -369,31 +490,25 @@
                   <label for="req-from-loc">From <span style="color:var(--danger)">*</span></label>
                   <select id="req-from-loc" class="form-control" required onchange="calculateSmartMetrics()">
                     <option value="" disabled selected>Select Location</option>
-                    <option value="ABU ROAD">ABU ROAD</option>
-                    <option value="AHMEDABAD">AHMEDABAD</option>
-                    <option value="AJMER">AJMER</option>
-                    <option value="Adarsh">Adarsh</option>
-                    <option value="BANAS">BANAS</option>
-                    <option value="BARODA">BARODA</option>
-                    <option value="BERMER">BERMER</option>
-                    <option value="BIKANER">BIKANER</option>
-                    <option value="DHANARI">DHANARI</option>
-                    <option value="FALNA">FALNA</option>
-                    <option value="JAIPUR">JAIPUR</option>
-                    <option value="JAYKAYPURAM">JAYKAYPURAM</option>
-                    <option value="JODHPUR">JODHPUR</option>
-                    <option value="KOJRA">KOJRA</option>
-                    <option value="MT ABU">MT ABU</option>
-                    <option value="PALANPUR">PALANPUR</option>
-                    <option value="PALI">PALI</option>
-                    <option value="PINDWARA">PINDWARA</option>
-                    <option value="SHEOGANJ">SHEOGANJ</option>
-                    <option value="SIROHI">SIROHI</option>
-                    <option value="SIROHI ROAD">SIROHI ROAD</option>
-                    <option value="SUMERPUR">SUMERPUR</option>
-                    <option value="SWARUPGANJ">SWARUPGANJ</option>
-                    <option value="TALETI">TALETI</option>
-                    <option value="UDAIPUR">UDAIPUR</option>
+                    <option value="BENNETT UNIVERSITY">Bennett University Campus</option>
+                    <option value="GREATER NOIDA">Greater Noida</option>
+                    <option value="NOIDA">Noida</option>
+                    <option value="NOIDA SECTOR 62">Noida Sector 62</option>
+                    <option value="KNOWLEDGE PARK">Knowledge Park</option>
+                    <option value="PARI CHOWK">Pari Chowk</option>
+                    <option value="DELHI">Delhi</option>
+                    <option value="NEW DELHI RAILWAY STATION">New Delhi Railway Station</option>
+                    <option value="IGI AIRPORT">IGI Airport (Terminal 3)</option>
+                    <option value="GURGAON">Gurgaon</option>
+                    <option value="FARIDABAD">Faridabad</option>
+                    <option value="GHAZIABAD">Ghaziabad</option>
+                    <option value="AGRA">Agra</option>
+                    <option value="MATHURA">Mathura</option>
+                    <option value="ALIGARH">Aligarh</option>
+                    <option value="MEERUT">Meerut</option>
+                    <option value="JEWAR AIRPORT">Jewar Airport (Noida International)</option>
+                    <option value="KASNA">Kasna</option>
+                    <option value="GAUR CITY">Gaur City</option>
                     <option value="OTHER">OTHER</option>
                   </select>
                 </div>
@@ -403,31 +518,25 @@
                   <label for="req-to-loc">To <span style="color:var(--danger)">*</span></label>
                   <select id="req-to-loc" class="form-control" required onchange="calculateSmartMetrics()">
                     <option value="" disabled selected>Select Location</option>
-                    <option value="ABU ROAD">ABU ROAD</option>
-                    <option value="AHMEDABAD">AHMEDABAD</option>
-                    <option value="AJMER">AJMER</option>
-                    <option value="Adarsh">Adarsh</option>
-                    <option value="BANAS">BANAS</option>
-                    <option value="BARODA">BARODA</option>
-                    <option value="BERMER">BERMER</option>
-                    <option value="BIKANER">BIKANER</option>
-                    <option value="DHANARI">DHANARI</option>
-                    <option value="FALNA">FALNA</option>
-                    <option value="JAIPUR">JAIPUR</option>
-                    <option value="JAYKAYPURAM">JAYKAYPURAM</option>
-                    <option value="JODHPUR">JODHPUR</option>
-                    <option value="KOJRA">KOJRA</option>
-                    <option value="MT ABU">MT ABU</option>
-                    <option value="PALANPUR">PALANPUR</option>
-                    <option value="PALI">PALI</option>
-                    <option value="PINDWARA">PINDWARA</option>
-                    <option value="SHEOGANJ">SHEOGANJ</option>
-                    <option value="SIROHI">SIROHI</option>
-                    <option value="SIROHI ROAD">SIROHI ROAD</option>
-                    <option value="SUMERPUR">SUMERPUR</option>
-                    <option value="SWARUPGANJ">SWARUPGANJ</option>
-                    <option value="TALETI">TALETI</option>
-                    <option value="UDAIPUR">UDAIPUR</option>
+                    <option value="BENNETT UNIVERSITY">Bennett University Campus</option>
+                    <option value="GREATER NOIDA">Greater Noida</option>
+                    <option value="NOIDA">Noida</option>
+                    <option value="NOIDA SECTOR 62">Noida Sector 62</option>
+                    <option value="KNOWLEDGE PARK">Knowledge Park</option>
+                    <option value="PARI CHOWK">Pari Chowk</option>
+                    <option value="DELHI">Delhi</option>
+                    <option value="NEW DELHI RAILWAY STATION">New Delhi Railway Station</option>
+                    <option value="IGI AIRPORT">IGI Airport (Terminal 3)</option>
+                    <option value="GURGAON">Gurgaon</option>
+                    <option value="FARIDABAD">Faridabad</option>
+                    <option value="GHAZIABAD">Ghaziabad</option>
+                    <option value="AGRA">Agra</option>
+                    <option value="MATHURA">Mathura</option>
+                    <option value="ALIGARH">Aligarh</option>
+                    <option value="MEERUT">Meerut</option>
+                    <option value="JEWAR AIRPORT">Jewar Airport (Noida International)</option>
+                    <option value="KASNA">Kasna</option>
+                    <option value="GAUR CITY">Gaur City</option>
                     <option value="OTHER">OTHER</option>
                   </select>
                 </div>
@@ -442,7 +551,7 @@
                 <!-- Pickup Location -->
                 <div class="form-group">
                   <label for="req-pickup-loc">Pickup Point <span style="color:var(--danger)">*</span></label>
-                  <input type="text" id="req-pickup-loc" class="form-control" placeholder="e.g. Sirohi Guest House"
+                  <input type="text" id="req-pickup-loc" class="form-control" placeholder="e.g. Bennett University Gate 1"
                     required>
                 </div>
 
@@ -450,14 +559,14 @@
                 <div class="form-group">
                   <label for="req-drop-loc">Drop Point <span style="color:var(--danger)">*</span></label>
                   <input type="text" id="req-drop-loc" class="form-control"
-                    placeholder="e.g. Abu Road Station Guest House" required>
+                    placeholder="e.g. IGI Airport Terminal 3" required>
                 </div>
 
                 <!-- Request Purpose -->
                 <div class="form-group">
                   <label for="req-purpose">Purpose of Request <span style="color:var(--danger)">*</span></label>
                   <input type="text" id="req-purpose" class="form-control"
-                    placeholder="e.g. Client Meeting / Shift Duty" required>
+                    placeholder="e.g. Academic Conference / Guest Pickup" required>
                 </div>
 
                 <!-- Checkboxes Group (Moved Above Date & Time Container) -->
@@ -523,24 +632,24 @@
                   </div>
                 </div>
 
-                <!-- Section Header for Employee Info -->
+                <!-- Section Header for Faculty Info -->
                 <div class="form-group full-width"
                   style="border-top: 1px solid rgba(255,255,255,0.15); padding-top: 24px; margin-top: 16px;">
                   <h4
                     style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px;">
-                    <i class="fa-solid fa-address-card" style="margin-right: 8px;"></i> Employee Information
+                    <i class="fa-solid fa-address-card" style="margin-right: 8px;"></i> Faculty Information
                   </h4>
                 </div>
 
-                <!-- Employee ID -->
+                <!-- Faculty ID -->
                 <div class="form-group">
-                  <label for="req-emp-id">Employee ID <span style="color:var(--danger)">*</span></label>
-                  <input type="text" id="req-emp-id" class="form-control" placeholder="e.g. EMP101" required>
+                  <label for="req-emp-id">Faculty ID <span style="color:var(--danger)">*</span></label>
+                  <input type="text" id="req-emp-id" class="form-control" placeholder="e.g. FAC101" required>
                 </div>
 
-                <!-- Employee Name -->
+                <!-- Faculty Name -->
                 <div class="form-group">
-                  <label for="req-emp-name">Employee Name <span style="color:var(--danger)">*</span></label>
+                  <label for="req-emp-name">Faculty Name <span style="color:var(--danger)">*</span></label>
                   <input type="text" id="req-emp-name" class="form-control" placeholder="Enter Full Name" required>
                 </div>
 
@@ -548,6 +657,12 @@
                 <div class="form-group">
                   <label for="req-dept">Department <span style="color:var(--danger)">*</span></label>
                   <input type="text" id="req-dept" class="form-control" placeholder="Enter Department" required>
+                </div>
+
+                <!-- Designation -->
+                <div class="form-group">
+                  <label for="req-designation">Designation <span style="color:var(--danger)">*</span></label>
+                  <input type="text" id="req-designation" class="form-control" placeholder="Enter Designation" required>
                 </div>
 
                 <!-- Mobile Number -->
@@ -727,8 +842,10 @@
               <div class="card-title-row">
                 <h2>Top Travel Routes & Destinations</h2>
               </div>
-              <div class="chart-container">
-                <canvas id="chart-destinations"></canvas>
+              <div class="chart-scroll-wrapper" style="flex: 1; overflow-y: auto; overflow-x: hidden; width: 100%; position: relative;">
+                <div id="dest-chart-container" style="position: relative; height: 100%; width: 100%;">
+                  <canvas id="chart-destinations"></canvas>
+                </div>
               </div>
             </div>
 
@@ -842,30 +959,6 @@
             <input type="text" id="modal-driver-name" class="form-control" readonly required placeholder="Driver will be auto-populated">
           </div>
 
-          <div class="form-group" style="margin-bottom: 16px;">
-            <label class="checkbox-container">
-              <input type="checkbox" id="modal-special-approval">
-              <span>Special Approval</span>
-            </label>
-          </div>
-
-          <div class="form-group" style="margin-bottom: 16px;">
-            <label for="modal-ded-emp-code">Amt Ded Emp</label>
-            <input type="text" id="modal-ded-emp-code" class="form-control" placeholder="Enter employee code" maxlength="6">
-          </div>
-
-          <div class="form-group" style="margin-bottom: 16px;">
-            <label for="modal-deduction-amount">Deduction Amount (₹)</label>
-            <input type="number" id="modal-deduction-amount" class="form-control" placeholder="Enter deduction amount" min="0">
-          </div>
-
-          <div class="form-group" style="margin-bottom: 24px;">
-            <label for="modal-sms-sent">SMS Sent</label>
-            <select id="modal-sms-sent" class="form-control" required>
-              <option value="No">No</option>
-              <option value="Yes" selected>Yes</option>
-            </select>
-          </div>
 
           <div class="form-actions">
             <button type="button" class="btn btn-secondary" onclick="closeDriverModal()">Cancel</button>
@@ -920,32 +1013,8 @@
           
           <div class="modal-form-grid">
             <div class="form-group">
-              <label for="report-plant" style="color: #ffffff; font-size: 13px;">Plant / Office Location</label>
-              <select id="report-plant" class="form-control" style="background: rgba(15, 23, 42, 0.98); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;">
-                <option value="">All Locations</option>
-                <option value="Sirohi Plant">Sirohi Plant</option>
-                <option value="Uchahar Plant">Uchahar Plant</option>
-                <option value="Surat Plant">Surat Plant</option>
-                <option value="Kalol Plant">Kalol Plant</option>
-                <option value="Jharli Plant">Jharli Plant</option>
-                <option value="Corporate Office">Corporate Office</option>
-              </select>
-            </div>
-            <div class="form-group">
               <label for="report-dept" style="color: #ffffff; font-size: 13px;">Department</label>
               <input type="text" id="report-dept" class="form-control" placeholder="e.g. Operations" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;">
-            </div>
-          </div>
-
-          <div class="modal-form-grid">
-            <div class="form-group">
-              <label for="report-journey-type" style="color: #ffffff; font-size: 13px;">Journey Type</label>
-              <select id="report-journey-type" class="form-control" style="background: rgba(15, 23, 42, 0.98); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;">
-                <option value="">All Types</option>
-                <option value="Official Visit">Official</option>
-                <option value="Personal Travel">Personal</option>
-                <option value="Emergency Booking">Emergency Booking</option>
-              </select>
             </div>
             <div class="form-group">
               <label for="report-category" style="color: #ffffff; font-size: 13px;">Vehicle Category</label>
@@ -961,18 +1030,6 @@
           </div>
 
           <div class="modal-form-grid" style="margin-bottom: 24px;">
-            <div class="form-group">
-              <label for="report-status" style="color: #ffffff; font-size: 13px;">Request Status</label>
-              <select id="report-status" class="form-control" style="background: rgba(15, 23, 42, 0.98); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;">
-                <option value="">All Statuses</option>
-                <option value="REQUEST SUBMITTED">Pending HOD Approval</option>
-                <option value="HOD APPROVED">HOD Approved</option>
-                <option value="VEHICLE ASSIGNED">Vehicle Assigned</option>
-                <option value="TRIP COMPLETED">Trip Completed</option>
-                <option value="REJECTED">Rejected</option>
-                <option value="Draft">Draft</option>
-              </select>
-            </div>
             <div class="form-group">
               <label for="report-employee-id" style="color: #ffffff; font-size: 13px;">Employee ID</label>
               <input type="text" id="report-employee-id" class="form-control" placeholder="e.g. EMP101" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;">
@@ -999,7 +1056,7 @@
             </div>
           </div>
 
-          <div class="modal-form-actions">
+           <div class="modal-form-actions">
             <button type="button" class="btn btn-secondary" onclick="closeDownloadReportModal()" style="background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid rgba(255,255,255,0.1);">Cancel</button>
             <button type="button" class="btn" onclick="generateReportPreview()" style="background-color: #17a2b8; color: white; font-weight: 600; border-radius: 8px; border: none; padding: 10px 20px; cursor: pointer;">Generate Preview</button>
             <button type="button" class="btn" onclick="handleDownloadPDF(event)" style="background-color: #dc3545; color: white; font-weight: 600; border-radius: 8px; border: none; padding: 10px 20px; cursor: pointer;">
@@ -1012,11 +1069,37 @@
     </div>
   </div>
 
+  <!-- Driver Complete Trip Modal -->
+  <div class="modal-overlay" id="driver-complete-modal">
+    <div class="modal-content glass-card" style="border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(15, 23, 42, 0.98); max-width: 500px; width: 90%;">
+      <div class="modal-header" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);">
+        <h3><i class="fa-solid fa-flag-checkered"></i> Complete Trip?</h3>
+        <i class="fa-solid fa-xmark modal-close" onclick="closeDriverCompleteModal()"></i>
+      </div>
+      <div class="modal-body" style="color: #ffffff; padding: 24px;">
+        <p style="margin-top: 0; font-size: 15px; margin-bottom: 20px;">Are you sure you want to mark this trip as completed?</p>
+        
+        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+          <div style="margin-bottom: 8px;"><strong>Request:</strong> <span id="complete-modal-req-id"></span></div>
+          <div style="margin-bottom: 8px;"><strong>Route:</strong> <span id="complete-modal-route"></span></div>
+          <div><strong>Vehicle:</strong> <span id="complete-modal-vehicle"></span></div>
+        </div>
+
+        <div class="form-actions" style="margin-top: 24px;">
+          <button type="button" class="btn btn-secondary" onclick="closeDriverCompleteModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" id="btn-confirm-complete-trip" style="background-color: var(--success); border-color: var(--success);" onclick="confirmDriverCompleteTrip()">
+            <i class="fa-solid fa-check"></i> Complete Trip
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification Overlay Container -->
   <div class="toast-container" id="toast-notification-holder"></div>
 
   <!-- Application Script -->
-  <script src="app.js"></script>
+  <script src="app.js?v=2.0.2"></script>
 </body>
 
 </html>

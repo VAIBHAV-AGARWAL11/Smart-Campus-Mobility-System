@@ -1,68 +1,114 @@
-// JK Lakshmi Cement - Vehicle Requisition Management System State & Logic
+// Bennett University - Campus Transport Management System State & Logic
 
-// Database Table 1: Employees Table (Mock representation)
+// Database Table 1: Users Table (Mock representation)
 let employeesTable = [
   {
-    employee_id: "EMP101",
-    employee_name: "Anoop Kumar",
-    department: "Operations",
-    designation: "Executive",
-    role: "Employee",
-    password: "emp123",
-    mobile: "9829012345"
+    employee_id: "FAC101",
+    employee_name: "Dr. Priya Sharma",
+    department: "SCSET",
+    designation: "Associate Professor",
+    role: "Faculty",
+    password: "fac123",
+    mobile: "9876501234"
   },
   {
-    employee_id: "EMP102",
-    employee_name: "VAIBHAV AGRAWAL",
-    department: "IT",
-    designation: "SDE",
-    role: "Employee",
-    password: "emp456",
-    mobile: "8000689178"
+    employee_id: "FAC102",
+    employee_name: "Dr. Amit Verma",
+    department: "School of Management",
+    designation: "Assistant Professor",
+    role: "Faculty",
+    password: "fac456",
+    mobile: "9876502345"
+  },
+  {
+    employee_id: "FAC103",
+    employee_name: "Prof. Neha Gupta",
+    department: "School of Law",
+    designation: "Professor",
+    role: "Faculty",
+    password: "fac789",
+    mobile: "9876503456"
   },
   {
     employee_id: "HOD201",
-    employee_name: "Rajesh Sharma",
-    department: "Operations",
-    designation: "Head of Operations",
+    employee_name: "Prof. Deepak Garg",
+    department: "SCSET",
+    designation: "Dean & HOD - SCSET",
     role: "HOD",
     password: "hod123",
     mobile: "9876543210"
   },
   {
     employee_id: "HOD202",
-    employee_name: "Manoj Bothra",
-    department: "IT",
-    designation: "IT Head",
+    employee_name: "Prof. Sunita Jain",
+    department: "School of Management",
+    designation: "HOD - School of Management",
     role: "HOD",
     password: "hod456",
-    mobile: "9828699699"
+    mobile: "9876543211"
+  },
+  {
+    employee_id: "TO301",
+    employee_name: "Suresh Yadav",
+    department: "Transport Office",
+    designation: "Transport Manager",
+    role: "TransportOffice",
+    password: "transport123",
+    mobile: "9876544321"
+  },
+  {
+    employee_id: "DRV401",
+    employee_name: "Rajendra Kumar",
+    department: "Transport Office",
+    designation: "Senior Driver",
+    role: "Driver",
+    password: "drv123",
+    mobile: "9876545432"
+  },
+  // Legacy alias support
+  {
+    employee_id: "EMP101",
+    employee_name: "Dr. Priya Sharma",
+    department: "SCSET",
+    designation: "Associate Professor",
+    role: "Faculty",
+    password: "emp123",
+    mobile: "9876501234"
+  },
+  {
+    employee_id: "EMP102",
+    employee_name: "Dr. Amit Verma",
+    department: "School of Management",
+    designation: "Assistant Professor",
+    role: "Faculty",
+    password: "emp456",
+    mobile: "9876502345"
   },
   {
     employee_id: "TD301",
-    employee_name: "Ramesh Singh",
-    department: "Time Office",
-    designation: "Transport Desk Lead",
-    role: "TransportDesk",
+    employee_name: "Suresh Yadav",
+    department: "Transport Office",
+    designation: "Transport Manager",
+    role: "TransportOffice",
     password: "transport123",
-    mobile: "8877665544"
+    mobile: "9876544321"
   }
 ];
 
-// Database Table 2: Vehicle Requests Table (Initial value, populated via localStorage)
+// Database Table 2: Vehicle Requests Table
 let requisitions = [];
 
-// Database Table 3: Vehicle Allocation Table (Initial value, populated via localStorage)
+// Database Table 3: Vehicle Allocation Table
 let vehicleAllocations = [];
 
-// Initial Fleet Dummy Data
+// Initial Fleet Data (Bennett University NCR Region Vehicles)
 let fleet = [
-  { id: "V01", vehicleNo: "RJ-24-CA-1234", modelName: "Maruti Suzuki Swift", category: "Hatchback", driverName: "Amit Sharma", status: "Available", rate: 8 },
-  { id: "V02", vehicleNo: "RJ-24-CB-5678", modelName: "Honda City", category: "Sedan", driverName: "Rajesh Kumar", status: "Available", rate: 8 },
-  { id: "V03", vehicleNo: "DL-3C-AY-8899", modelName: "Toyota Camry Hybrid", category: "Premium Sedan", driverName: "Vijay Yadav", status: "Available", rate: 10 },
-  { id: "V04", vehicleNo: "RJ-24-CC-9911", modelName: "Mahindra XUV700", category: "SUV", driverName: "Ramesh Singh", status: "Available", rate: 10 },
-  { id: "V05", vehicleNo: "DL-1C-AA-0007", modelName: "Audi A6 Limo", category: "Executive Vehicle", driverName: "None (Assigned)", status: "Available", rate: 12 },
-  { id: "V06", vehicleNo: "RJ-24-CD-2468", modelName: "Hyundai Verna", category: "Sedan", driverName: "Sanjay Patel", status: "Available", rate: 8 }
+  { id: "V01", vehicleNo: "UP-14-BU-1001", modelName: "Toyota Etios", category: "Sedan", driverName: "Rajendra Kumar", status: "Available", rate: 8 },
+  { id: "V02", vehicleNo: "UP-14-BU-1002", modelName: "Toyota Innova Crysta", category: "SUV", driverName: "Mohan Singh", status: "Available", rate: 10 },
+  { id: "V03", vehicleNo: "DL-4C-BU-2001", modelName: "Honda City", category: "Premium Sedan", driverName: "Sunil Chauhan", status: "Available", rate: 10 },
+  { id: "V04", vehicleNo: "UP-14-BU-1003", modelName: "Force Traveller 26 Seater", category: "Bus", driverName: "Rajendra Kumar", status: "Available", rate: 15 },
+  { id: "V05", vehicleNo: "UP-14-BU-1004", modelName: "Mahindra XUV700", category: "SUV", driverName: "Mohan Singh", status: "Available", rate: 10 },
+  { id: "V06", vehicleNo: "DL-4C-BU-2002", modelName: "Maruti Suzuki Swift", category: "Hatchback", driverName: "Sunil Chauhan", status: "Available", rate: 8 }
 ];
 
 // Systems Notifications Center
@@ -73,155 +119,76 @@ let charts = {};
 
 // Driver Details Directory
 const DRIVER_DETAILS = {
-  "Rajesh Kumar": { phone: "+91 99887 76655", license: "Heavy Commercial", rating: "4.8 ★" },
-  "Amit Sharma": { phone: "+91 98765 43210", license: "Light Commercial", rating: "4.7 ★" },
-  "Vijay Yadav": { phone: "+91 91234 56789", license: "Premium Chauffeur", rating: "4.9 ★" },
-  "Ramesh Singh": { phone: "+91 88776 65544", license: "Heavy Commercial", rating: "4.6 ★" },
-  "Sanjay Patel": { phone: "+91 77665 54433", license: "Light Commercial", rating: "4.8 ★" }
+  "Rajendra Kumar": { phone: "+91 98765 45432", license: "Heavy Commercial", rating: "4.8 ★" },
+  "Mohan Singh": { phone: "+91 98765 46543", license: "Heavy Commercial", rating: "4.6 ★" },
+  "Sunil Chauhan": { phone: "+91 98765 47654", license: "Light Commercial", rating: "4.7 ★" }
 };
 
-// Global Distance matrix & lookup (shared logic with backend)
+// Global Distance matrix & lookup for Bennett University / NCR region routes
 function getDistance(from, to) {
   if (!from || !to) return 0;
   const f = from.trim().toUpperCase();
   const t = to.trim().toUpperCase();
-  
+
   if (f === t) return 0;
-  
-  // Try exact lookup first (alphabetically ordered keys)
+
   const key = [f, t].sort().join("-");
-  
+
   const lookup = {
-    // Jaykaypuram routes
-    "ABU ROAD-JAYKAYPURAM": 25,
-    "AHMEDABAD-JAYKAYPURAM": 210,
-    "AJMER-JAYKAYPURAM": 310,
-    "ADARSH-JAYKAYPURAM": 35,
-    "BANAS-JAYKAYPURAM": 10,
-    "BARODA-JAYKAYPURAM": 340,
-    "BERMER-JAYKAYPURAM": 220,
-    "BIKANER-JAYKAYPURAM": 420,
-    "DHANARI-JAYKAYPURAM": 15,
-    "FALNA-JAYKAYPURAM": 95,
-    "JAIPUR-JAYKAYPURAM": 440,
-    "JAYKAYPURAM-JODHPUR": 240,
-    "JAYKAYPURAM-KOJRA": 15,
-    "JAYKAYPURAM-MT ABU": 50,
-    "JAYKAYPURAM-PALANPUR": 80,
-    "JAYKAYPURAM-PALI": 175,
-    "JAYKAYPURAM-PINDWARA": 30,
-    "JAYKAYPURAM-SHEOGANJ": 85,
-    "JAYKAYPURAM-SIROHI": 35,
-    "JAYKAYPURAM-SIROHI ROAD": 25,
-    "JAYKAYPURAM-SUMERPUR": 85,
-    "JAYKAYPURAM-SWARUPGANJ": 10,
-    "JAYKAYPURAM-TALETI": 20,
-    "JAYKAYPURAM-UDAIPUR": 140,
-    
-    // Abu Road routes
-    "ABU ROAD-AHMEDABAD": 190,
-    "ABU ROAD-AJMER": 330,
-    "ABU ROAD-ADARSH": 15,
-    "ABU ROAD-BANAS": 30,
-    "ABU ROAD-BARODA": 320,
-    "ABU ROAD-BERMER": 260,
-    "ABU ROAD-BIKANER": 450,
-    "ABU ROAD-DHANARI": 35,
-    "ABU ROAD-FALNA": 145,
-    "ABU ROAD-JAIPUR": 465,
-    "ABU ROAD-JODHPUR": 215,
-    "ABU ROAD-KOJRA": 40,
-    "ABU ROAD-MT ABU": 28,
-    "ABU ROAD-PALANPUR": 55,
-    "ABU ROAD-PALI": 185,
-    "ABU ROAD-PINDWARA": 55,
-    "ABU ROAD-SHEOGANJ": 135,
-    "ABU ROAD-SIROHI": 70,
-    "ABU ROAD-SIROHI ROAD": 45,
-    "ABU ROAD-SUMERPUR": 130,
-    "ABU ROAD-SWARUPGANJ": 30,
-    "ABU ROAD-TALETI": 5,
-    "ABU ROAD-UDAIPUR": 150,
-    
-    // Sirohi routes
-    "AHMEDABAD-SIROHI": 240,
-    "AJMER-SIROHI": 260,
-    "ADARSH-SIROHI": 85,
-    "BANAS-SIROHI": 65,
-    "BARODA-SIROHI": 370,
-    "BERMER-SIROHI": 200,
-    "BIKANER-SIROHI": 380,
-    "DHANARI-SIROHI": 50,
-    "FALNA-SIROHI": 75,
-    "JAIPUR-SIROHI": 390,
-    "JODHPUR-SIROHI": 180,
-    "KOJRA-SIROHI": 30,
-    "MT ABU-SIROHI": 80,
-    "PALANPUR-SIROHI": 115,
-    "PALI-SIROHI": 110,
-    "PINDWARA-SIROHI": 25,
-    "SHEOGANJ-SIROHI": 65,
-    "SIROHI-SIROHI ROAD": 25,
-    "SIROHI-SUMERPUR": 60,
-    "SIROHI-SWARUPGANJ": 45,
-    "SIROHI-TALETI": 65,
-    "SIROHI-UDAIPUR": 120,
-    
-    // Banas routes
-    "AHMEDABAD-BANAS": 220,
-    "AJMER-BANAS": 300,
-    "ADARSH-BANAS": 45,
-    "BANAS-BARODA": 350,
-    "BANAS-BERMER": 210,
-    "BANAS-BIKANER": 410,
-    "BANAS-DHANARI": 25,
-    "BANAS-FALNA": 90,
-    "BANAS-JAIPUR": 430,
-    "BANAS-JODHPUR": 235,
-    "BANAS-KOJRA": 25,
-    "BANAS-MT ABU": 60,
-    "BANAS-PALANPUR": 90,
-    "BANAS-PALI": 165,
-    "BANAS-PINDWARA": 20,
-    "BANAS-SHEOGANJ": 80,
-    "BANAS-SIROHI ROAD": 15,
-    "BANAS-SUMERPUR": 80,
-    "BANAS-SWARUPGANJ": 15,
-    "BANAS-TALETI": 30,
-    "BANAS-UDAIPUR": 135
+    "BENNETT UNIVERSITY-GREATER NOIDA": 8,
+    "BENNETT UNIVERSITY-NOIDA": 25,
+    "BENNETT UNIVERSITY-NOIDA SECTOR 62": 30,
+    "BENNETT UNIVERSITY-KNOWLEDGE PARK": 5,
+    "BENNETT UNIVERSITY-PARI CHOWK": 10,
+    "BENNETT UNIVERSITY-DELHI": 55,
+    "BENNETT UNIVERSITY-NEW DELHI RAILWAY STATION": 50,
+    "BENNETT UNIVERSITY-IGI AIRPORT": 60,
+    "BENNETT UNIVERSITY-GURGAON": 70,
+    "BENNETT UNIVERSITY-FARIDABAD": 45,
+    "BENNETT UNIVERSITY-GHAZIABAD": 50,
+    "BENNETT UNIVERSITY-AGRA": 180,
+    "BENNETT UNIVERSITY-MATHURA": 140,
+    "BENNETT UNIVERSITY-ALIGARH": 100,
+    "BENNETT UNIVERSITY-MEERUT": 80,
+    "BENNETT UNIVERSITY-JEWAR AIRPORT": 15,
+    "BENNETT UNIVERSITY-KASNA": 6,
+    "BENNETT UNIVERSITY-GAUR CITY": 12,
+    "DELHI-GREATER NOIDA": 45,
+    "GREATER NOIDA-NOIDA": 18,
+    "GREATER NOIDA-KNOWLEDGE PARK": 4,
+    "GREATER NOIDA-PARI CHOWK": 6,
+    "GREATER NOIDA-IGI AIRPORT": 52,
+    "DELHI-NOIDA": 20,
+    "DELHI-GURGAON": 30,
+    "DELHI-IGI AIRPORT": 15,
+    "DELHI-NEW DELHI RAILWAY STATION": 5
   };
 
   if (lookup[key] !== undefined) {
     return lookup[key];
   }
 
-  // Fallback coordinates
+  // Fallback coordinates for NCR region
   const coords = {
-    "ABU ROAD": [24.48, 72.78],
-    "AHMEDABAD": [23.02, 72.57],
-    "AJMER": [26.45, 74.64],
-    "ADARSH": [24.43, 72.75],
-    "BANAS": [24.63, 72.85],
-    "BARODA": [22.31, 73.18],
-    "BERMER": [25.75, 71.42],
-    "BIKANER": [28.02, 73.31],
-    "DHANARI": [24.64, 72.78],
-    "FALNA": [25.23, 73.24],
-    "JAIPUR": [26.91, 75.79],
-    "JAYKAYPURAM": [24.60, 72.85],
-    "JODHPUR": [26.24, 73.02],
-    "KOJRA": [24.77, 72.88],
-    "MT ABU": [24.59, 72.72],
-    "PALANPUR": [24.17, 72.43],
-    "PALI": [25.77, 73.32],
-    "PINDWARA": [24.79, 73.05],
-    "SHEOGANJ": [25.15, 73.06],
-    "SIROHI": [24.88, 72.86],
-    "SIROHI ROAD": [24.75, 72.95],
-    "SUMERPUR": [25.15, 73.08],
-    "SWARUPGANJ": [24.69, 72.92],
-    "TALETI": [24.51, 72.76],
-    "UDAIPUR": [24.59, 73.71]
+    "BENNETT UNIVERSITY": [28.45, 77.58],
+    "GREATER NOIDA": [28.47, 77.50],
+    "NOIDA": [28.57, 77.32],
+    "NOIDA SECTOR 62": [28.62, 77.36],
+    "KNOWLEDGE PARK": [28.46, 77.53],
+    "PARI CHOWK": [28.47, 77.52],
+    "DELHI": [28.70, 77.10],
+    "NEW DELHI RAILWAY STATION": [28.64, 77.22],
+    "IGI AIRPORT": [28.55, 77.10],
+    "GURGAON": [28.46, 77.03],
+    "FARIDABAD": [28.41, 77.31],
+    "GHAZIABAD": [28.67, 77.42],
+    "AGRA": [27.18, 78.02],
+    "MATHURA": [27.49, 77.67],
+    "ALIGARH": [27.88, 78.08],
+    "MEERUT": [28.98, 77.71],
+    "JEWAR AIRPORT": [28.31, 77.61],
+    "KASNA": [28.44, 77.55],
+    "GAUR CITY": [28.47, 77.54]
   };
 
   const c1 = coords[f];
@@ -234,11 +201,11 @@ function getDistance(from, to) {
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const straightDist = R * c;
-    const factor = (f.includes("UDAIPUR") || t.includes("UDAIPUR") || f.includes("MT ABU") || t.includes("MT ABU")) ? 1.5 : 1.25;
+    const factor = 1.3;
     return Math.round(straightDist * factor);
   }
 
@@ -248,7 +215,7 @@ function getDistance(from, to) {
 
 // Simulated SMS dispatch notifications helper
 function sendSMSNotification(req, driverName, vehicleNo, modelName) {
-  const driverInfo = DRIVER_DETAILS[driverName] || { phone: "+91 99009 90099", license: "Commercial", rating: "4.7 ★" };
+  const driverInfo = DRIVER_DETAILS[driverName] || { phone: "+91 98765 45432", license: "Commercial", rating: "4.7 ★" };
 
   const timeFormatted = new Date(req.pickupTime).toLocaleString("en-IN", {
     month: "short",
@@ -257,89 +224,82 @@ function sendSMSNotification(req, driverName, vehicleNo, modelName) {
     minute: "2-digit"
   });
 
-  const smsMessage = `JK LAKSHMI CEMENT TRANSPORT ALERT: Requisition ${req.id} confirmed.\n\nVehicle: ${modelName} (${vehicleNo})\nDriver: ${driverName}\nMobile: ${driverInfo.phone}\nPickup: ${req.pickupLoc}\nTime: ${timeFormatted}\nDest: ${req.destLoc}\n\nHave a safe journey!`;
+  const smsMessage = `BENNETT UNIVERSITY TRANSPORT ALERT: Requisition ${req.id} confirmed.\n\nVehicle: ${modelName} (${vehicleNo})\nDriver: ${driverName}\nMobile: ${driverInfo.phone}\nPickup: ${req.pickupLoc}\nTime: ${timeFormatted}\nDest: ${req.destLoc}\n\nHave a safe journey!`;
 
-  let smsContainer = document.getElementById("sms-notification-holder");
-  if (!smsContainer) {
-    smsContainer = document.createElement("div");
-    smsContainer.id = "sms-notification-holder";
-    smsContainer.style.position = "fixed";
-    smsContainer.style.bottom = "24px";
-    smsContainer.style.left = "24px";
-    smsContainer.style.zIndex = "2500";
-    document.body.appendChild(smsContainer);
-  }
+  const container = document.getElementById("toast-notification-holder");
+  if (!container) return;
 
-  const smsCard = document.createElement("div");
-  smsCard.className = "sms-notification-mock glass-card";
-  smsCard.style.cssText = `
-    width: 350px;
-    background: rgba(15, 23, 42, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
-    color: #ffffff;
-    padding: 16px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 12px;
-    transform: translateX(-120%);
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  `;
+  const smsToast = document.createElement("div");
+  smsToast.className = "toast-message sms-notification-mock glass-card";
+  smsToast.style.cssText = "border-left: 4px solid var(--secondary-color); background: rgba(15, 23, 42, 0.95); color: #ffffff; width: 340px; padding: 16px; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); font-family: sans-serif;";
 
-  smsCard.innerHTML = `
-    <div class="sms-header" style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; opacity: 0.8; letter-spacing: 0.5px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">
-      <div class="app-brand" style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: var(--secondary-color);">
-        <i class="fa-solid fa-message"></i> SMS DISPATCH CENTER
-      </div>
-      <div style="font-size: 10px; color: var(--text-muted);">Just Now</div>
-    </div>
-    <div style="font-size: 11px; font-weight: 600; color: var(--accent-color); margin-top: 2px;">
-      To: ${req.empName} (${req.mobile})
+  smsToast.innerHTML = `
+    <div class="sms-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 11px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px;">
+      <span><i class="fa-solid fa-comment-sms" style="color: var(--secondary-color); margin-right: 6px;"></i> SMS GATEWAY SIMULATION</span>
+      <span>JUST NOW</span>
     </div>
     <div class="sms-body" style="background: rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 12px; font-size: 12.5px; line-height: 1.5; border-left: 3px solid var(--secondary-color); font-family: monospace; white-space: pre-wrap; color: #f1f5f9;">${smsMessage}</div>
-    <div class="sms-footer" style="display: flex; justify-content: space-between; align-items: center; font-size: 10px; opacity: 0.6;">
-      <span>Delivered via JKLC Carrier Service</span>
+    <div class="sms-footer" style="display: flex; justify-content: space-between; align-items: center; font-size: 10px; opacity: 0.6; margin-top: 8px;">
+      <span>Delivered via Bennett Campus Transport Service</span>
       <button class="sms-close-btn" style="background: transparent; border: none; color: #ffffff; cursor: pointer; font-weight: bold; font-size: 11px;" onclick="this.closest('.sms-notification-mock').remove()">Dismiss</button>
     </div>
   `;
 
-  smsContainer.appendChild(smsCard);
+  container.appendChild(smsToast);
 
   setTimeout(() => {
-    smsCard.style.transform = "translateX(0)";
-  }, 100);
-
-  // Auto-dismiss after 12s
-  setTimeout(() => {
-    if (smsCard.parentNode) {
-      smsCard.style.transform = "translateX(-120%)";
-      setTimeout(() => {
-        if (smsCard.parentNode) smsCard.remove();
-      }, 500);
+    if (smsToast && smsToast.parentNode) {
+      smsToast.remove();
     }
-  }, 12000);
+  }, 10000);
 }
+
 
 // ====================================================
 // AUTHENTICATION MODULE STATE & LOGIC
 // ====================================================
-const AUTH_KEY = "jklc_auth_session";
-const API_BASE = window.location.port === '5500' ? window.location.origin.replace(':5500', ':3000') : '';
+const AUTH_KEY = "bennett_auth_session";
+const API_BASE = (window.location.protocol.startsWith('http') && window.location.port !== '3000')
+  ? `${window.location.protocol}//${window.location.hostname}:3000`
+  : (window.location.protocol === 'file:' ? 'http://localhost:3000' : '');
+
+function isSameDepartment(dept1, dept2) {
+  if (!dept1 || !dept2) return false;
+  const d1 = String(dept1).trim().toLowerCase();
+  const d2 = String(dept2).trim().toLowerCase();
+  if (d1 === d2) return true;
+
+  if (d1.includes(d2) || d2.includes(d1)) return true;
+
+  const groups = [
+    ['scset', 'computer science', 'cse', 'cs'],
+    ['school of management', 'management', 'som', 'dept of management'],
+    ['school of law', 'law', 'sol', 'dept of law'],
+    ['school of media', 'media', 'somc', 'journalism'],
+    ['school of liberal arts', 'liberal arts', 'sola', 'humanities']
+  ];
+
+  for (const group of groups) {
+    const m1 = group.some(alias => d1.includes(alias));
+    const m2 = group.some(alias => d2.includes(alias));
+    if (m1 && m2) return true;
+  }
+
+  return false;
+}
 
 function initDatabase() {
-  if (!localStorage.getItem("jklc_fleet")) {
-    localStorage.setItem("jklc_fleet", JSON.stringify(fleet));
+  if (!localStorage.getItem("bennett_fleet")) {
+    localStorage.setItem("bennett_fleet", JSON.stringify(fleet));
   } else {
-    fleet = JSON.parse(localStorage.getItem("jklc_fleet"));
+    fleet = JSON.parse(localStorage.getItem("bennett_fleet"));
   }
   requisitions = [];
   vehicleAllocations = [];
 }
 
 function saveDatabase() {
-  localStorage.setItem("jklc_fleet", JSON.stringify(fleet));
+  localStorage.setItem("bennett_fleet", JSON.stringify(fleet));
 }
 
 function fetchRequisitionsAndInit() {
@@ -350,25 +310,42 @@ function fetchRequisitionsAndInit() {
   let url = '/myrequests';
   if (user.role === 'HOD') {
     url = '/pending-hod';
-  } else if (user.role === 'TransportDesk') {
+  } else if (user.role === 'TransportOffice' || user.role === 'TransportDesk') {
     url = '/transport/pending';
+  } else if (user.role === 'Driver') {
+    url = '/driver/trips';
   }
+
+  const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timeoutId = controller ? setTimeout(() => controller.abort(), 2000) : null;
 
   fetch(API_BASE + url, {
     headers: {
       'x-employee-id': user.employee_id
-    }
+    },
+    ...(controller ? { signal: controller.signal } : {})
   })
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
     .then(data => {
-      requisitions = data;
+      if (timeoutId) clearTimeout(timeoutId);
+      if (Array.isArray(data)) {
+        requisitions = data;
+      } else if (data && Array.isArray(data.trips)) {
+        requisitions = data.trips;
+      }
       updateNextRequisitionNumber();
       loadVehicles(); // Sync fleet with DB
       initDashboard();
     })
     .catch(err => {
-      console.error('Error fetching requisitions:', err);
-      showToast("toast-danger", "Failed to synchronize requests with server.");
+      if (timeoutId) clearTimeout(timeoutId);
+      console.warn('Could not sync with server, loading dashboard with local state:', err);
+      updateNextRequisitionNumber();
+      loadVehicles();
+      initDashboard();
     });
 }
 
@@ -379,78 +356,279 @@ function initAuth() {
     try {
       const user = JSON.parse(session);
       document.body.classList.add("authenticated");
+
+      const loginWrapper = document.getElementById("login-wrapper");
+      if (loginWrapper) {
+        loginWrapper.style.setProperty("display", "none", "important");
+      }
+
+      const appContainer = document.querySelector(".app-container");
+      if (appContainer) {
+        appContainer.style.setProperty("display", "flex", "important");
+      }
+
       updateLoggedUserUI(user);
       fetchRequisitionsAndInit();
     } catch (e) {
       localStorage.removeItem(AUTH_KEY);
-      document.body.classList.remove("authenticated");
+      showLoginPage();
     }
   } else {
-    document.body.classList.remove("authenticated");
+    showLoginPage();
+  }
+}
+
+function showLoginPage(event) {
+  if (event) event.preventDefault();
+  document.body.classList.remove("authenticated");
+
+  const loginWrapper = document.getElementById("login-wrapper");
+  if (loginWrapper) {
+    loginWrapper.style.setProperty("display", "flex", "important");
+  }
+
+  const registerWrapper = document.getElementById("register-wrapper");
+  if (registerWrapper) {
+    registerWrapper.style.setProperty("display", "none", "important");
+  }
+
+  const appContainer = document.querySelector(".app-container");
+  if (appContainer) {
+    appContainer.style.setProperty("display", "none", "important");
+  }
+}
+
+function showRegisterPage(event) {
+  if (event) event.preventDefault();
+  document.body.classList.remove("authenticated");
+
+  const loginWrapper = document.getElementById("login-wrapper");
+  if (loginWrapper) {
+    loginWrapper.style.setProperty("display", "none", "important");
+  }
+
+  const registerWrapper = document.getElementById("register-wrapper");
+  if (registerWrapper) {
+    registerWrapper.style.setProperty("display", "flex", "important");
+  }
+
+  const appContainer = document.querySelector(".app-container");
+  if (appContainer) {
+    appContainer.style.setProperty("display", "none", "important");
+  }
+}
+
+function handleRegisterSubmit(event) {
+  try {
+    if (event) event.preventDefault();
+    
+    const employeeId = document.getElementById("reg-employee-id").value.trim();
+    const employeeName = document.getElementById("reg-employee-name").value.trim();
+    const department = document.getElementById("reg-department").value.trim();
+    const designation = document.getElementById("reg-designation").value.trim();
+    const role = document.getElementById("reg-role").value;
+    const password = document.getElementById("reg-password").value;
+    const mobile = document.getElementById("reg-mobile").value.trim();
+    
+    const errorMsg = document.getElementById("register-error-msg");
+    const submitBtn = document.getElementById("register-btn-main");
+
+    if (errorMsg) errorMsg.style.display = "none";
+
+    // Basic frontend validation
+    if (!employeeId || !employeeName || !department || !designation || !role || !password || !mobile) {
+      errorMsg.innerText = "All fields are required.";
+      errorMsg.style.display = "flex";
+      return;
+    }
+
+    const mobileRegex = /^[0-9]{10}$/;
+    if (!mobileRegex.test(mobile)) {
+      errorMsg.innerText = "Mobile number must be a valid 10-digit number.";
+      errorMsg.style.display = "flex";
+      return;
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Registering...';
+    }
+
+    fetch(API_BASE + '/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        employee_id: employeeId, 
+        employee_name: employeeName, 
+        department: department, 
+        designation: designation, 
+        role: role, 
+        password: password, 
+        mobile: mobile 
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        showToast("toast-success", data.message || "Registration successful!");
+        document.getElementById("register-form").reset();
+        showLoginPage();
+      } else {
+        if (errorMsg) {
+          errorMsg.innerText = data.message || 'Registration failed.';
+          errorMsg.style.display = 'flex';
+        }
+      }
+    })
+    .catch(err => {
+      console.error('Registration failed:', err);
+      if (errorMsg) {
+        errorMsg.innerText = 'Server error. Please try again later.';
+        errorMsg.style.display = 'flex';
+      }
+    })
+    .finally(() => {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Register';
+      }
+    });
+
+  } catch (e) {
+    alert("Error in handleRegisterSubmit: " + e.message + "\n" + e.stack);
   }
 }
 
 function handleLoginSubmit(event) {
-  event.preventDefault();
-  const usernameInput = document.getElementById("login-username");
-  const passwordInput = document.getElementById("login-password");
-  const errorMsg = document.getElementById("login-error-msg");
+  try {
+    if (event) event.preventDefault();
+    const usernameInput = document.getElementById("login-username");
+    const passwordInput = document.getElementById("login-password");
+    const errorMsg = document.getElementById("login-error-msg");
 
-  const username = usernameInput.value.trim();
-  const password = passwordInput.value.trim();
+    const username = usernameInput ? usernameInput.value.trim() : "";
+    const password = passwordInput ? passwordInput.value.trim() : "";
 
-  if (!username || !password) {
-    errorMsg.innerText = "Please enter both Employee ID and Password.";
-    errorMsg.style.display = "flex";
-    return;
+    if (errorMsg) errorMsg.style.display = "none";
+
+    if (!username || !password) {
+      if (errorMsg) {
+        errorMsg.innerText = !username ? "Please enter your User ID." : "Please enter your password.";
+        errorMsg.style.display = "flex";
+      }
+      return;
+    }
+
+    performLogin(username, password);
+  } catch (e) {
+    alert("Error in handleLoginSubmit: " + e.message + "\n" + e.stack);
+  }
+}
+
+function completeLoginSuccess(sessionData) {
+  try {
+    localStorage.setItem(AUTH_KEY, JSON.stringify(sessionData));
+  } catch (e) {
+    console.warn("Could not save session to localStorage:", e);
+  }
+  document.body.classList.add("authenticated");
+
+  const loginWrapper = document.getElementById("login-wrapper");
+  if (loginWrapper) {
+    loginWrapper.style.setProperty("display", "none", "important");
   }
 
-  errorMsg.style.display = "none";
-  performLogin(username, password);
+  const appContainer = document.querySelector(".app-container");
+  if (appContainer) {
+    appContainer.style.setProperty("display", "flex", "important");
+  }
+
+  updateLoggedUserUI(sessionData);
+  showToast("toast-success", `Welcome back, ${sessionData.employee_name}!`);
+
+  fetchRequisitionsAndInit();
+
+  if (sessionData.role === "Faculty" || sessionData.role === "Employee") {
+    switchView("dashboard");
+  } else if (sessionData.role === "HOD") {
+    switchView("workflow");
+  } else if (sessionData.role === "TransportOffice" || sessionData.role === "TransportDesk") {
+    switchView("workflow");
+  } else if (sessionData.role === "Driver") {
+    switchView("workflow");
+  }
 }
 
 function performLogin(username, password) {
+  const errorMsg = document.getElementById("login-error-msg");
+  const submitBtn = document.querySelector(".login-btn-main");
+
+  // Disable button during API call
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing In...';
+  }
+
+  // Try backend API first
   fetch(API_BASE + '/login', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ username, password })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: username.trim(), password: password.trim() })
   })
     .then(res => res.json())
-    .then(authResponse => {
-      if (authResponse.success) {
-        const sessionData = authResponse.employee;
-
-        localStorage.setItem(AUTH_KEY, JSON.stringify(sessionData));
-
-        document.body.classList.add("authenticated");
-        updateLoggedUserUI(sessionData);
-
-        showToast("toast-success", `Welcome back, ${sessionData.employee_name}!`);
-
-        // Fetch requisitions and then load dashboard
-        fetchRequisitionsAndInit();
-
-        // Redirect based on role
-        if (sessionData.role === "Employee") {
-          switchView("dashboard");
-        } else if (sessionData.role === "HOD") {
-          switchView("workflow");
-        } else if (sessionData.role === "TransportDesk") {
-          switchView("workflow");
-        }
+    .then(data => {
+      if (data.success && data.employee) {
+        completeLoginSuccess(data.employee);
       } else {
-        const errorMsg = document.getElementById("login-error-msg");
-        errorMsg.innerText = authResponse.message;
-        errorMsg.style.display = "flex";
+        // Show error
+        if (errorMsg) {
+          errorMsg.innerText = data.message || 'Invalid User ID or Password.';
+          errorMsg.style.display = 'flex';
+        }
       }
     })
     .catch(err => {
-      console.error(err);
-      const errorMsg = document.getElementById("login-error-msg");
-      errorMsg.innerText = "Server connection error.";
-      errorMsg.style.display = "flex";
+      console.warn('Backend login failed, trying local fallback:', err);
+      // Fallback to local employeesTable lookup if server is unreachable
+      const cleanUser = (username || '').trim().toLowerCase();
+      const cleanPass = (password || '').trim();
+
+      let matchedUser = employeesTable.find(u => {
+        const idLower = u.employee_id.toLowerCase();
+        if (idLower === cleanUser && u.password === cleanPass) return true;
+        // Alias support
+        if (cleanUser === 'td301' && (idLower === 'to301') && u.password === cleanPass) return true;
+        if (cleanUser === 'to301' && (idLower === 'td301') && u.password === cleanPass) return true;
+        if (cleanUser === 'emp101' && (idLower === 'fac101') && u.password === cleanPass) return true;
+        if (cleanUser === 'fac101' && (idLower === 'emp101') && u.password === cleanPass) return true;
+        if (cleanUser === 'emp102' && (idLower === 'fac102') && u.password === cleanPass) return true;
+        if (cleanUser === 'fac102' && (idLower === 'emp102') && u.password === cleanPass) return true;
+        return false;
+      });
+
+      if (matchedUser) {
+        // Create session without password
+        const sessionData = {
+          employee_id: matchedUser.employee_id,
+          employee_name: matchedUser.employee_name,
+          department: matchedUser.department,
+          designation: matchedUser.designation,
+          role: matchedUser.role,
+          mobile: matchedUser.mobile
+        };
+        completeLoginSuccess(sessionData);
+      } else {
+        if (errorMsg) {
+          errorMsg.innerText = 'Invalid User ID or Password.';
+          errorMsg.style.display = 'flex';
+        }
+      }
+    })
+    .finally(() => {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+      }
     });
 }
 
@@ -483,9 +661,10 @@ function updateLoggedUserUI(user) {
   const navRole = document.querySelector(".user-details-nav .role");
   if (navName) navName.innerText = user.employee_name;
   if (navRole) {
-    if (user.role === "TransportDesk") navRole.innerText = "Transport Desk";
+    if (user.role === "TransportOffice" || user.role === "TransportDesk") navRole.innerText = "Transport Office";
     else if (user.role === "HOD") navRole.innerText = "HOD";
-    else navRole.innerText = "Employee";
+    else if (user.role === "Driver") navRole.innerText = "Campus Driver";
+    else navRole.innerText = "Faculty";
   }
 
   // Update sidebar footer
@@ -499,6 +678,10 @@ function updateLoggedUserUI(user) {
   const reqEmpName = document.getElementById("req-emp-name");
   const reqDept = document.getElementById("req-dept");
   const reqEmpMobile = document.getElementById("req-emp-mobile");
+  if (reqEmpId && user.employee_id) reqEmpId.value = user.employee_id;
+  if (reqEmpName && user.employee_name) reqEmpName.value = user.employee_name;
+  if (reqDept && user.department) reqDept.value = user.department;
+  if (reqEmpMobile && user.mobile) reqEmpMobile.value = user.mobile;
 
   // Render sidebar menu items based on role
   renderSidebarForRole(user.role);
@@ -509,7 +692,7 @@ function renderSidebarForRole(role) {
   if (!menuContainer) return;
 
   let menuHTML = "";
-  if (role === "Employee") {
+  if (role === "Faculty" || role === "Employee") {
     menuHTML = `
       <li class="menu-item active" id="menu-item-dashboard">
         <a class="menu-link" onclick="switchView('dashboard')">
@@ -551,7 +734,7 @@ function renderSidebarForRole(role) {
         </a>
       </li>
     `;
-  } else if (role === "TransportDesk") {
+  } else if (role === "TransportOffice" || role === "TransportDesk") {
     menuHTML = `
       <li class="menu-item active" id="menu-item-workflow">
         <a class="menu-link" onclick="switchView('workflow')">
@@ -572,6 +755,15 @@ function renderSidebarForRole(role) {
         </a>
       </li>
     `;
+  } else if (role === "Driver") {
+    menuHTML = `
+      <li class="menu-item active" id="menu-item-workflow">
+        <a class="menu-link" onclick="switchView('workflow')">
+          <i class="fa-solid fa-route"></i>
+          <span>My Assigned Trips</span>
+        </a>
+      </li>
+    `;
   }
 
   menuContainer.innerHTML = menuHTML;
@@ -583,13 +775,32 @@ function handleLogout(event) {
   localStorage.removeItem(AUTH_KEY);
   document.body.classList.remove("authenticated");
 
-  // Reset password field
+  // Explicitly show login, hide dashboard
+  const loginWrapper = document.getElementById("login-wrapper");
+  if (loginWrapper) {
+    loginWrapper.style.setProperty("display", "flex", "important");
+  }
+
+  const registerWrapper = document.getElementById("register-wrapper");
+  if (registerWrapper) {
+    registerWrapper.style.setProperty("display", "none", "important");
+  }
+
+  const appContainer = document.querySelector(".app-container");
+  if (appContainer) {
+    appContainer.style.setProperty("display", "none", "important");
+  }
+
+  // Reset form fields
   const pwdInput = document.getElementById("login-password");
   if (pwdInput) pwdInput.value = "";
 
-  // Reset username field
   const usernameInput = document.getElementById("login-username");
   if (usernameInput) usernameInput.value = "";
+
+  // Clear any login error messages
+  const errorMsg = document.getElementById("login-error-msg");
+  if (errorMsg) errorMsg.style.display = "none";
 
   showToast("toast-info", "Logged out successfully.");
 }
@@ -721,18 +932,19 @@ function switchView(viewName) {
 
   // Set top navigation title dynamically based on role and view
   const titles = {
-    dashboard: role === "Employee" ? "Employee Dashboard" : "Dashboard Overview",
+    dashboard: (role === "Faculty" || role === "Employee") ? "Faculty Dashboard" : "Dashboard Overview",
     requisition: "Create Vehicle Requisition",
-    workflow: role === "HOD" ? "Approval Dashboard" : (role === "TransportDesk" ? "Vehicle Allocation Dashboard" : "Track Requests"),
+    workflow: role === "HOD" ? "Approval Dashboard" : ((role === "TransportOffice" || role === "TransportDesk") ? "Vehicle Allocation Dashboard" : (role === "Driver" ? "Driver Trip Portal" : "Track Requests")),
     vehicles: "Register & Manage Vehicles",
     analytics: "Reports & Analytics Dashboard"
   };
-  document.getElementById("current-view-title").innerText = titles[viewName] || "Vehicle Requisition Portal";
+  const titleElem = document.getElementById("current-view-title");
+  if (titleElem) titleElem.innerText = titles[viewName] || "Bennett University Transport Management System";
 
   // Enforce role-based button visibility for Download Report
   const downloadBtn = document.getElementById("btn-download-report");
   if (downloadBtn) {
-    if (viewName === "analytics" && (role === "TransportDesk" || role === "HOD")) {
+    if (viewName === "analytics" && (role === "TransportOffice" || role === "TransportDesk" || role === "HOD")) {
       downloadBtn.style.display = "inline-flex";
     } else {
       downloadBtn.style.display = "none";
@@ -744,8 +956,10 @@ function switchView(viewName) {
     let url = '/myrequests';
     if (user.role === 'HOD') {
       url = '/pending-hod';
-    } else if (user.role === 'TransportDesk') {
+    } else if (user.role === 'TransportOffice' || user.role === 'TransportDesk') {
       url = '/transport/pending';
+    } else if (user.role === 'Driver') {
+      url = '/driver/trips';
     }
 
     fetch(API_BASE + url, {
@@ -753,15 +967,16 @@ function switchView(viewName) {
         'x-employee-id': user.employee_id
       }
     })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
       .then(data => {
-        requisitions = data;
-        updateNextRequisitionNumber();
-
-        if (viewName === "vehicles") {
-          loadVehicles();
+        if (Array.isArray(data)) {
+          requisitions = data;
+        } else if (data && Array.isArray(data.trips)) {
+          requisitions = data.trips;
         }
-
         if (viewName === "requisition") {
           loadDraftIfExists();
         }
@@ -784,15 +999,14 @@ function switchView(viewName) {
         }
       })
       .catch(err => {
-        console.error(err);
-        // Fallback in case of server failure to keep working off client state
-        if (viewName === "analytics") {
-          setTimeout(initAnalyticsCharts, 50);
-        } else {
-          destroyCharts();
-        }
-        if (viewName === "workflow") {
-          renderWorkflowTimeline("all");
+        console.warn('Sync on view switch failed, rendering local state:', err);
+        if (viewName === "requisition") loadDraftIfExists();
+        if (viewName === "analytics") setTimeout(initAnalyticsCharts, 50);
+        else destroyCharts();
+        if (viewName === "workflow") renderWorkflowTimeline("all");
+        if (viewName === "dashboard") {
+          updateDashboardStats();
+          renderRecentRequests();
         }
       });
   } else {
@@ -815,11 +1029,15 @@ function updateDashboardStats() {
   if (!session) return;
   const user = JSON.parse(session);
 
+  const isFaculty = user.role === "Faculty" || user.role === "Employee";
+  const isHOD = user.role === "HOD";
+  const isTransport = user.role === "TransportOffice" || user.role === "TransportDesk";
+
   let visibleReqs = [];
-  if (user.role === "Employee") {
-    visibleReqs = requisitions.filter(r => r.employee_id === user.employee_id);
-  } else if (user.role === "HOD") {
-    visibleReqs = requisitions.filter(r => r.department === user.department);
+  if (isFaculty) {
+    visibleReqs = requisitions.filter(r => r.employee_id === user.employee_id || r.empId === user.employee_id);
+  } else if (isHOD) {
+    visibleReqs = requisitions.filter(r => isSameDepartment(r.department, user.department));
   } else {
     visibleReqs = requisitions; // Transport Desk
   }
@@ -829,9 +1047,9 @@ function updateDashboardStats() {
 
   // Pending Approval/Allocation counts
   let pendingCount = 0;
-  if (user.role === "HOD") {
+  if (isHOD) {
     pendingCount = visibleReqs.filter(r => r.status === "REQUEST SUBMITTED").length;
-  } else if (user.role === "TransportDesk") {
+  } else if (isTransport) {
     pendingCount = visibleReqs.filter(r => r.status === "HOD APPROVED").length;
   } else {
     pendingCount = visibleReqs.filter(r => r.status === "REQUEST SUBMITTED" || r.status === "HOD APPROVED").length;
@@ -857,17 +1075,24 @@ function renderRecentRequests() {
   if (!session) return;
   const user = JSON.parse(session);
 
+  const isFaculty = user.role === "Faculty" || user.role === "Employee";
+  const isHOD = user.role === "HOD";
+
   let visibleReqs = [];
-  if (user.role === "Employee") {
-    visibleReqs = requisitions.filter(r => r.employee_id === user.employee_id);
-  } else if (user.role === "HOD") {
-    visibleReqs = requisitions.filter(r => r.department === user.department);
+  if (isFaculty) {
+    visibleReqs = requisitions.filter(r => r.employee_id === user.employee_id || r.empId === user.employee_id);
+  } else if (isHOD) {
+    visibleReqs = requisitions.filter(r => isSameDepartment(r.department, user.department));
   } else {
     visibleReqs = requisitions;
   }
 
   // Sort requisitions by latest ID
-  const sorted = [...visibleReqs].reverse().slice(0, 5);
+  const sorted = [...visibleReqs].sort((a, b) => {
+    const idA = parseInt(String(a.id || a.requisition_no || "").replace(/\\D/g, '')) || 0;
+    const idB = parseInt(String(b.id || b.requisition_no || "").replace(/\\D/g, '')) || 0;
+    return idB - idA;
+  }).slice(0, 5);
 
   if (sorted.length === 0) {
     const tr = document.createElement("tr");
@@ -1030,22 +1255,42 @@ function populateTimeDropdowns() {
 }
 
 function loadCategoryOptions() {
-  fetch(API_BASE + '/api/vehicle-categories')
+  const select = document.getElementById("req-category");
+  if (!select) return;
+
+  const renderCategories = (catList) => {
+    select.innerHTML = '<option value="" disabled selected>Select Category</option>';
+    catList.forEach(catName => {
+      const option = document.createElement("option");
+      option.value = catName;
+      option.innerText = catName;
+      select.appendChild(option);
+    });
+  };
+
+  // 1. Render Bennett categories immediately
+  renderCategories(BENNETT_CATEGORIES);
+
+  // 2. Non-blocking optional sync with 1.5s timeout
+  const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timeoutId = controller ? setTimeout(() => controller.abort(), 1500) : null;
+
+  fetch(API_BASE + '/api/vehicle-categories', controller ? { signal: controller.signal } : {})
     .then(res => res.json())
     .then(categories => {
-      const select = document.getElementById("req-category");
-      if (!select) return;
-
-      select.innerHTML = '<option value="" disabled selected>Select Category</option>';
-      categories.forEach(cat => {
-        const option = document.createElement("option");
-        option.value = cat.descr;
-        option.innerText = cat.descr;
-        select.appendChild(option);
-      });
+      if (timeoutId) clearTimeout(timeoutId);
+      if (Array.isArray(categories) && categories.length > 0) {
+        const catNames = categories
+          .map(cat => (typeof cat === 'object' ? cat.descr : cat))
+          .filter(name => typeof name === 'string' && !name.includes('Govt') && !name.includes('Ladies') && !name.includes('CSR') && !name.includes('Banas') && !name.includes('HO Employees') && !name.includes('Auditor') && !name.includes('Health Check-up'));
+        
+        if (catNames.length > 0) {
+          renderCategories(catNames);
+        }
+      }
     })
     .catch(err => {
-      console.error("Failed to load vehicle categories:", err);
+      if (timeoutId) clearTimeout(timeoutId);
     });
 }
 
@@ -1332,11 +1577,25 @@ function handleRequestSubmit(event) {
       },
       body: JSON.stringify(newReq)
     })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          return res.json().catch(() => ({ success: false, message: `Server returned status ${res.status}` }));
+        }
+        return res.json();
+      })
       .then(resData => {
         if (resData.success) {
-          // Add locally
-          requisitions.push(resData.request);
+          const reqObj = resData.request || newReq;
+          const reqNum = resData.requestNo || reqObj.requisition_no || reqObj.id || "2026001";
+          reqObj.id = reqNum;
+          
+          // Add to local list if not already present
+          const existingIdx = requisitions.findIndex(r => r.id === reqNum || r.requisition_no === reqNum);
+          if (existingIdx >= 0) {
+            requisitions[existingIdx] = reqObj;
+          } else {
+            requisitions.unshift(reqObj);
+          }
 
           // Add to system notifications
           notifications.unshift({
@@ -1352,16 +1611,20 @@ function handleRequestSubmit(event) {
           renderRecentRequests();
           renderNotificationsFeed();
 
-          showToast("toast-success", `Requisition ${resData.request.id} submitted successfully! Awaiting HOD approval.`);
-          switchView("workflow");
+          showToast("toast-success", `Request Submitted Successfully (Requisition No: ${reqNum})`);
+          switchView("dashboard");
           resetForm();
         } else {
-          showToast("toast-danger", "Failed to submit request: " + resData.message);
+          showToast("toast-danger", "Database insertion failed: " + (resData.message || "Unknown error"));
         }
       })
       .catch(err => {
-        console.error(err);
-        showToast("toast-danger", "Failed to submit request due to server error.");
+        console.error("VECHREQ INSERT ERROR:", err);
+        let msg = err.message;
+        if (msg === "Load failed" || msg === "Failed to fetch") {
+          msg = "Backend server is not running on port 3000. Please run 'npm start' in the project directory.";
+        }
+        showToast("toast-danger", "Request submission failed: " + msg);
       });
   } catch (err) {
     console.error("Javascript Error in handleRequestSubmit:", err);
@@ -1533,7 +1796,7 @@ function updateNextRequisitionNumber() {
         console.error("Error fetching next requisition ID:", err);
         const nextNum = requisitions.length + 1;
         const currentYear = new Date().getFullYear();
-        const formattedNum = `${currentYear}${String(nextNum).padStart(3, '0')}`;
+        const formattedNum = `${currentYear}${nextNum}`;
         reqNumDisplay.innerText = formattedNum;
       });
   }
@@ -1892,13 +2155,19 @@ function renderWorkflowTimeline(filter = "all") {
   if (!session) return;
   const user = JSON.parse(session);
   const role = user.role;
+  const isFaculty = role === "Faculty" || role === "Employee";
+  const isHOD = role === "HOD";
+  const isTransport = role === "TransportOffice" || role === "TransportDesk";
+  const isDriver = role === "Driver";
 
   // Filter items by role visibility
   let visibleReqs = [];
-  if (role === "Employee") {
-    visibleReqs = requisitions.filter(r => r.employee_id === user.employee_id);
-  } else if (role === "HOD") {
-    visibleReqs = requisitions.filter(r => r.department === user.department);
+  if (isFaculty) {
+    visibleReqs = requisitions.filter(r => r.employee_id === user.employee_id || r.empId === user.employee_id);
+  } else if (isHOD) {
+    visibleReqs = requisitions.filter(r => isSameDepartment(r.department, user.department));
+  } else if (isDriver) {
+    visibleReqs = requisitions.filter(r => r.driverName === user.employee_name);
   } else {
     visibleReqs = requisitions; // Transport Desk sees all allocations / requisitions
   }
@@ -1908,29 +2177,58 @@ function renderWorkflowTimeline(filter = "all") {
   if (filter === "all") {
     filtered = visibleReqs;
   } else if (filter === "pending") {
-    if (role === "HOD") {
-      filtered = visibleReqs.filter(r => r.status === "REQUEST SUBMITTED");
-    } else if (role === "TransportDesk") {
-      filtered = visibleReqs.filter(r => r.status === "HOD APPROVED");
+    if (isHOD) {
+      filtered = visibleReqs.filter(r => {
+        const s = String(r.status || '').toUpperCase();
+        return s.includes("SUBMITTED") || s.includes("PENDING HOD") || s === "PENDING";
+      });
+    } else if (isTransport) {
+      filtered = visibleReqs.filter(r => {
+        const s = String(r.status || '').toUpperCase();
+        return s.includes("HOD APPROVED") || s === "APPROVED";
+      });
+    } else if (isDriver) {
+      filtered = visibleReqs.filter(r => {
+        const s = String(r.status || '').toUpperCase();
+        return s.includes("ASSIGNED") || s.includes("STARTED");
+      });
     } else {
-      filtered = visibleReqs.filter(r => r.status === "REQUEST SUBMITTED" || r.status === "HOD APPROVED");
+      filtered = visibleReqs.filter(r => {
+        const s = String(r.status || '').toUpperCase();
+        return s.includes("SUBMITTED") || s.includes("PENDING HOD") || s === "PENDING" || s.includes("HOD APPROVED") || s === "APPROVED";
+      });
     }
   } else if (filter === "approved") {
-    filtered = visibleReqs.filter(r => r.status === "HOD APPROVED" || r.status === "VEHICLE ASSIGNED");
+    if (isDriver) {
+      filtered = visibleReqs.filter(r => {
+        const s = String(r.status || '').toUpperCase();
+        return s.includes("ASSIGNED") || s.includes("STARTED");
+      });
+    } else {
+      filtered = visibleReqs.filter(r => {
+        const s = String(r.status || '').toUpperCase();
+        return s.includes("APPROVED") || s.includes("ASSIGNED");
+      });
+    }
   } else if (filter === "completed") {
-    filtered = visibleReqs.filter(r => r.status === "TRIP COMPLETED" || r.status === "REJECTED");
+    filtered = visibleReqs.filter(r => {
+      const s = String(r.status || '').toUpperCase();
+      return s.includes("COMPLETED") || s.includes("REJECTED");
+    });
   }
 
   if (filtered.length === 0) {
     let emptyTitle = "No requisitions found matching the selected filter.";
     let emptySub = "";
 
-    if (role === "Employee") {
+    if (isFaculty) {
       emptyTitle = "No vehicle requisitions found.";
       emptySub = "Create a new request to begin tracking.";
-    } else if (role === "HOD") {
+    } else if (isHOD) {
       emptyTitle = "No pending approvals available.";
-    } else if (role === "TransportDesk") {
+    } else if (isDriver) {
+      emptyTitle = "No trips assigned.";
+    } else if (isTransport) {
       emptyTitle = "No vehicle allocation requests available.";
     }
 
@@ -1972,17 +2270,35 @@ function renderWorkflowTimeline(filter = "all") {
     stepsList.forEach((s, idx) => {
       let stepClass = "";
       let stepIcon = s.icon;
-      let timestamp = "";
+      let timestampHTML = "<div class='step-time'>Pending</div>";
 
       // Find if we have a log for this step
       const stepLog = req.logs.find(l =>
-        (idx === 0 && l.step === "Requested") ||
-        (idx === 1 && l.step === "HOD Approved") ||
-        (idx === 2 && l.step === "Allocation Started") ||
-        (idx === 3 && l.step === "Vehicle Allocated") ||
+        (idx === 0 && l.step === "Request Submitted") ||
+        (idx === 1 && (l.step === "HOD Approved" || l.step === "HOD Rejected")) ||
+        (idx === 2 && l.step === "Transport Allocated") ||
+        (idx === 3 && l.step === "Vehicle Assigned") ||
         (idx === 4 && l.step === "Trip Completed")
       );
-      if (stepLog) timestamp = stepLog.time;
+      
+      if (stepLog) {
+        let timeStr = stepLog.time === 'Not Available' ? 'Not Available' : stepLog.time;
+        timestampHTML = `<div class="step-time">${timeStr}</div>`;
+        if (stepLog.performed_by_name && stepLog.performed_by_id) {
+          let actionVerb = 'Performed';
+          if (idx === 0) actionVerb = 'Submitted';
+          else if (idx === 1 && stepLog.step === 'HOD Approved') actionVerb = 'Approved';
+          else if (idx === 1 && stepLog.step === 'HOD Rejected') actionVerb = 'Rejected';
+          else if (idx === 2) actionVerb = 'Allocated';
+          else if (idx === 3) actionVerb = 'Assigned';
+          else if (idx === 4) actionVerb = 'Completed';
+          
+          timestampHTML += `<div style="font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.2;">
+            ${actionVerb} by ${stepLog.performed_by_name}<br>
+            <span style="opacity: 0.7;">| ${stepLog.performed_by_id}</span>
+          </div>`;
+        }
+      }
 
       if (req.status === "REJECTED" && idx === 1) {
         stepClass = "rejected";
@@ -2007,14 +2323,21 @@ function renderWorkflowTimeline(filter = "all") {
             <i class="fa-solid ${stepIcon}"></i>
           </div>
           <div class="step-label">${s.label}</div>
-          <div class="step-time">${timestamp ? timestamp : '--:--'}</div>
+          ${timestampHTML}
         </div>
       `;
     });
 
     // Action button rows based on status and user role
     let actionRowHTML = "";
-    if (req.status === "REQUEST SUBMITTED" && role === "HOD") {
+    const sUpper = String(req.status || '').toUpperCase();
+    const isPendingHOD = sUpper.includes("SUBMITTED") || sUpper.includes("PENDING HOD") || sUpper === "PENDING";
+    const isHODApproved = sUpper.includes("HOD APPROVED") || sUpper === "APPROVED";
+    const isAssigned = sUpper.includes("VEHICLE ASSIGNED") || sUpper.includes("DRIVER ASSIGNED");
+    const isCompleted = sUpper.includes("TRIP COMPLETED") || sUpper.includes("COMPLETED");
+    const isRejected = sUpper.includes("REJECTED");
+
+    if (isPendingHOD && isHOD) {
       actionRowHTML = `
         <div class="timeline-actions-row">
           <span class="description"><strong>HOD Review Pending:</strong> Review the vehicle request from your department.</span>
@@ -2024,7 +2347,7 @@ function renderWorkflowTimeline(filter = "all") {
           </div>
         </div>
       `;
-    } else if (req.status === "HOD APPROVED" && role === "TransportDesk") {
+    } else if (isHODApproved && isTransport) {
       actionRowHTML = `
         <div class="timeline-actions-row" style="background-color: var(--secondary-alpha-10);">
           <span class="description"><strong>Transport Desk Allocation:</strong> Assign a vehicle and driver for this request.</span>
@@ -2033,41 +2356,41 @@ function renderWorkflowTimeline(filter = "all") {
           </button>
         </div>
       `;
-    } else if (req.status === "VEHICLE ASSIGNED" && role === "TransportDesk") {
+    } else if (isAssigned && (isTransport || isDriver)) {
       actionRowHTML = `
         <div class="timeline-actions-row" style="background-color: var(--primary-alpha-05);">
           <span class="description"><strong>Trip in Progress:</strong> Vehicle ${req.vehicleNo} with driver ${req.driverName} is assigned. Click below to complete trip.</span>
-          <button class="btn btn-primary btn-approve" onclick="completeTrip('${req.id}')">
+          <button class="btn btn-primary btn-approve" onclick="openDriverCompleteModal('${req.id}')">
             <i class="fa-solid fa-circle-check"></i> Complete Trip
           </button>
         </div>
       `;
-    } else if (req.status === "TRIP COMPLETED") {
+    } else if (isCompleted) {
       actionRowHTML = `
         <div class="timeline-actions-row" style="background-color: var(--success-light); color: var(--success);">
           <span><i class="fa-solid fa-circle-check"></i> Trip completed. Vehicle: ${req.vehicleNo} | Driver: ${req.driverName}</span>
-          <span style="font-weight:700;">₹${req.cost.toLocaleString("en-IN")}.00</span>
+          <span style="font-weight:700;">₹${req.cost ? req.cost.toLocaleString("en-IN") : '0'}.00</span>
         </div>
       `;
-    } else if (req.status === "REJECTED") {
+    } else if (isRejected) {
       actionRowHTML = `
         <div class="timeline-actions-row" style="background-color: var(--danger-light); color: var(--danger);">
           <span><i class="fa-solid fa-circle-xmark"></i> Requisition rejected by HOD.</span>
         </div>
       `;
-    } else if (req.status === "REQUEST SUBMITTED" && role === "Employee") {
+    } else if (isPendingHOD && isFaculty) {
       actionRowHTML = `
         <div class="timeline-actions-row" style="background-color: var(--warning-light); color: var(--accent-dark);">
           <span><i class="fa-solid fa-clock"></i> Awaiting HOD Approval.</span>
         </div>
       `;
-    } else if (req.status === "HOD APPROVED" && role === "Employee") {
+    } else if (req.status === "HOD APPROVED" && isFaculty) {
       actionRowHTML = `
         <div class="timeline-actions-row" style="background-color: var(--info-light); color: var(--info);">
           <span><i class="fa-solid fa-clock"></i> Approved by HOD. Awaiting Transport Desk vehicle allocation.</span>
         </div>
       `;
-    } else if (req.status === "VEHICLE ASSIGNED" && role === "Employee") {
+    } else if (req.status === "VEHICLE ASSIGNED" && isFaculty) {
       actionRowHTML = `
         <div class="timeline-actions-row" style="background-color: var(--success-light); color: var(--success);">
           <span><i class="fa-solid fa-car"></i> Vehicle Assigned: <strong>${req.vehicleNo}</strong> | Driver: <strong>${req.driverName}</strong></span>
@@ -2125,10 +2448,15 @@ function processWorkflowAction(reqId, action) {
     },
     body: JSON.stringify({
       request_id: req.request_id || req.id,
-      hod_approved_by: user.employee_id
+      hod_approved_by: user.employee_id || "HOD201"
     })
   })
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) {
+        return res.json().catch(() => ({ success: false, message: `Server status ${res.status}` }));
+      }
+      return res.json();
+    })
     .then(data => {
       if (data.success) {
         const nowTime = new Date().toTimeString().slice(0, 5);
@@ -2150,8 +2478,21 @@ function processWorkflowAction(reqId, action) {
       }
     })
     .catch(err => {
-      console.error(err);
-      showToast("toast-danger", "Server error processing approval action.");
+      console.warn("Server unreachable for approval, updating locally:", err);
+      const nowTime = new Date().toTimeString().slice(0, 5);
+      if (action === "reject") {
+        req.status = "REJECTED";
+        req.logs.push({ step: "HOD Rejected", time: nowTime });
+        showToast("toast-danger", `Requisition ${reqId} has been rejected.`);
+      } else {
+        req.status = "HOD APPROVED";
+        req.logs.push({ step: "HOD Approved", time: nowTime });
+        showToast("toast-success", `Requisition ${reqId} approved by HOD.`);
+      }
+
+      updateDashboardStats();
+      renderRecentRequests();
+      renderWorkflowTimeline(workflowFilter);
     });
 }
 
@@ -2164,64 +2505,60 @@ function openDriverAllocationForReq(reqId) {
 
   // Reset driver name input display
   document.getElementById("modal-driver-name").value = "";
-  document.getElementById("modal-ded-emp-code").value = "";
 
   // Fetch the latest vehicles list to ensure we have the correct DB status
+  const populateAssignOptions = () => {
+    const select = document.getElementById("modal-select-vehicle");
+    if (!select) return;
+    select.innerHTML = "";
+
+    const busyVehicles = requisitions
+      .filter(r => r.status === "VEHICLE ASSIGNED")
+      .map(r => r.vehicleNo);
+
+    const availableVehicles = fleet.filter(v =>
+      v.status === "Available" &&
+      !busyVehicles.includes(v.vehicleNo)
+    );
+
+    if (availableVehicles.length === 0) {
+      select.innerHTML = `<option value="" disabled selected>No Vehicles Available</option>`;
+    } else {
+      select.innerHTML = `<option value="" disabled selected>Select Fleet Vehicle:</option>`;
+      availableVehicles.forEach(v => {
+        const isSuggested = v.category === req.suggestedCategory ? " (Suggested)" : "";
+        select.innerHTML += `<option value="${v.id}">${v.modelName} (${v.vehicleNo}) - ${v.category}${isSuggested} [Driver: ${v.driverName}]</option>`;
+      });
+    }
+
+
+
+    document.getElementById("driver-assignment-modal").classList.add("active");
+  };
+
   fetch(API_BASE + '/vehicles')
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
     .then(data => {
-      // Map data to fleet
-      fleet = data.map(v => ({
-        id: String(v.id),
-        vehicleNo: v.vehicle_no,
-        modelName: v.model_name,
-        category: v.vehicle_category,
-        driverName: v.driver_name,
-        driverMobNo: v.driver_mob_no,
-        status: v.status,
-        rate: v.vehicle_category === 'Hatchback' ? 8 : (v.vehicle_category === 'Sedan' ? 12 : (v.vehicle_category === 'Premium Sedan' ? 18 : (v.vehicle_category === 'SUV' ? 18 : 35)))
-      }));
-
-      // Update fleet count badge
-      const countBadge = document.getElementById("fleet-count-badge");
-      if (countBadge) countBadge.innerText = `Total: ${fleet.length} vehicles`;
-
-      const select = document.getElementById("modal-select-vehicle");
-      select.innerHTML = "";
-
-      // Determine busy vehicles based on current active assignments (status: VEHICLE ASSIGNED)
-      const busyVehicles = requisitions
-        .filter(r => r.status === "VEHICLE ASSIGNED")
-        .map(r => r.vehicleNo);
-
-      // Filter ALL available vehicles from the fleet (no category filter)
-      const availableVehicles = fleet.filter(v =>
-        v.status === "Available" &&
-        !busyVehicles.includes(v.vehicleNo)
-      );
-
-      if (availableVehicles.length === 0) {
-        select.innerHTML = `<option value="" disabled selected>No Vehicles Available</option>`;
-      } else {
-        select.innerHTML = `<option value="" disabled selected>Select Fleet Vehicle:</option>`;
-        availableVehicles.forEach(v => {
-          const isSuggested = v.category === req.suggestedCategory ? " (Suggested)" : "";
-          select.innerHTML += `<option value="${v.id}">${v.modelName} (${v.vehicleNo}) - ${v.category}${isSuggested} [Driver: ${v.driverName}]</option>`;
-        });
+      if (Array.isArray(data)) {
+        fleet = data.map(v => ({
+          id: String(v.id),
+          vehicleNo: v.vehicle_no,
+          modelName: v.model_name,
+          category: v.vehicle_category,
+          driverName: v.driver_name,
+          driverMobNo: v.driver_mob_no,
+          status: v.status,
+          rate: v.vehicle_category === 'Hatchback' ? 8 : (v.vehicle_category === 'Sedan' ? 12 : (v.vehicle_category === 'Premium Sedan' ? 18 : (v.vehicle_category === 'SUV' ? 18 : 35)))
+        }));
       }
-
-      // Reset / pre-populate the new fields
-      document.getElementById("modal-special-approval").checked = req.special_approval === 'Y' || req.special_approval === true;
-      document.getElementById("modal-ded-emp-code").value = req.ded_emp_code || "";
-      document.getElementById("modal-deduction-amount").value = req.deduction_amount || "";
-      document.getElementById("modal-sms-sent").value = req.sms_sent || "Yes";
-
-      // Open modal
-      document.getElementById("driver-assignment-modal").classList.add("active");
+      populateAssignOptions();
     })
     .catch(err => {
-      console.error("Error loading vehicles on allocate click:", err);
-      showToast("toast-danger", "Failed to sync fleet status.");
+      console.warn("Could not load vehicles from server, using local fleet:", err);
+      populateAssignOptions();
     });
 }
 
@@ -2234,10 +2571,7 @@ function handleDriverAssignment(event) {
   event.preventDefault();
   const vehicleId = document.getElementById("modal-select-vehicle").value;
   const driverName = document.getElementById("modal-driver-name").value;
-  const specialApproval = document.getElementById("modal-special-approval").checked ? 'Y' : 'N';
-  const dedEmpCode = document.getElementById("modal-ded-emp-code").value;
-  const deductionAmount = document.getElementById("modal-deduction-amount").value;
-  const smsSent = document.getElementById("modal-sms-sent").value;
+
 
   if (!vehicleId || !driverName) {
     showToast("toast-danger", "Please select a vehicle and a driver.");
@@ -2259,14 +2593,15 @@ function handleDriverAssignment(event) {
         request_id: req.request_id || req.id,
         vehicle_number: v.vehicleNo,
         driver_name: driverName,
-        assigned_by: user.employee_id,
-        special_approval: specialApproval,
-        ded_emp_code: dedEmpCode,
-        deduction_amount: deductionAmount,
-        sms_sent: smsSent
+        assigned_by: user.employee_id || 'TO301'
       })
     })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          return res.json().catch(() => ({ success: false, message: `Server status ${res.status}` }));
+        }
+        return res.json();
+      })
       .then(data => {
         if (data.success) {
           // Update vehicle
@@ -2276,17 +2611,9 @@ function handleDriverAssignment(event) {
           // Update Requisition
           req.status = "VEHICLE ASSIGNED";
           req.driverName = driverName;
-          req.vehicleNo = v.vehicleNo;
-          req.special_approval = specialApproval;
-          req.ded_emp_code = dedEmpCode;
-          req.deduction_amount = deductionAmount;
-          req.sms_sent = smsSent;
           req.logs.push({ step: "Vehicle Allocated", time: new Date().toTimeString().slice(0, 5) });
 
           showToast("toast-success", `Vehicle ${v.vehicleNo} and driver ${driverName} assigned to Requisition ${req.id}.`);
-          if (smsSent === 'Yes') {
-            sendSMSNotification(req, driverName, v.vehicleNo, v.modelName);
-          }
 
           // Close modal & update lists
           closeDriverModal();
@@ -2294,12 +2621,25 @@ function handleDriverAssignment(event) {
           renderRecentRequests();
           renderWorkflowTimeline(workflowFilter);
         } else {
-          showToast("toast-danger", "Failed to assign vehicle: " + data.message);
+          showToast("toast-danger", "Failed to assign vehicle: " + (data.message || "Unknown error"));
         }
       })
       .catch(err => {
-        console.error(err);
-        showToast("toast-danger", "Server error assigning vehicle.");
+        console.warn("Backend unreachable for vehicle assignment, updating locally:", err);
+        v.status = "On Trip";
+        v.driverName = driverName;
+
+        req.status = "VEHICLE ASSIGNED";
+        req.driverName = driverName;
+        req.vehicleNo = v.vehicleNo;
+        req.logs.push({ step: "Vehicle Allocated", time: new Date().toTimeString().slice(0, 5) });
+
+        showToast("toast-success", `Vehicle ${v.vehicleNo} and driver ${driverName} assigned to Requisition ${req.id}.`);
+
+        closeDriverModal();
+        updateDashboardStats();
+        renderRecentRequests();
+        renderWorkflowTimeline(workflowFilter);
       });
   }
 }
@@ -2318,7 +2658,12 @@ function completeTrip(reqId) {
       status: 'TRIP COMPLETED'
     })
   })
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) {
+        return res.json().catch(() => ({ success: false, message: `Server status ${res.status}` }));
+      }
+      return res.json();
+    })
     .then(data => {
       if (data.success) {
         // Release vehicle
@@ -2338,12 +2683,25 @@ function completeTrip(reqId) {
         renderRecentRequests();
         renderWorkflowTimeline(workflowFilter);
       } else {
-        showToast("toast-danger", "Failed to complete trip: " + data.message);
+        showToast("toast-danger", "Failed to complete trip: " + (data.message || "Unknown error"));
       }
     })
     .catch(err => {
-      console.error(err);
-      showToast("toast-danger", "Server error completing trip.");
+      console.warn("Backend unreachable for completing trip, updating locally:", err);
+      const v = fleet.find(veh => veh.vehicleNo === req.vehicleNo);
+      if (v) {
+        v.status = "Available";
+        v.driverName = v.driverName.replace(" (Assigned)", "");
+      }
+
+      req.status = "TRIP COMPLETED";
+      req.logs.push({ step: "Trip Completed", time: new Date().toTimeString().slice(0, 5) });
+
+      showToast("toast-success", `Trip for ${reqId} completed safely.`);
+
+      updateDashboardStats();
+      renderRecentRequests();
+      renderWorkflowTimeline(workflowFilter);
     });
 }
 
@@ -2480,19 +2838,40 @@ function initAnalyticsCharts() {
   // 4. Top Destinations
   const ctxDest = document.getElementById("chart-destinations")?.getContext("2d");
   if (ctxDest) {
-    const destLabels = ['ABU ROAD', 'AHMEDABAD', 'BANAS', 'PINDWARA', 'UDAIPUR', 'SIROHI'];
-    const destData = destLabels.map(dest => {
-      return requisitions.filter(r => {
-        const dLoc = (r.destination || r.destLoc || "").toUpperCase();
-        if (dest === 'ABU ROAD') return dLoc.includes('ABU ROAD') || dLoc.includes('ABUROAD');
-        if (dest === 'AHMEDABAD') return dLoc.includes('AHMEDABAD') || dLoc.includes('AHEMDABAD');
-        if (dest === 'BANAS') return dLoc.includes('BANAS');
-        if (dest === 'PINDWARA') return dLoc.includes('PINDWARA');
-        if (dest === 'UDAIPUR') return dLoc.includes('UDAIPUR');
-        if (dest === 'SIROHI') return dLoc.includes('SIROHI');
-        return false;
-      }).length;
+    const destCounts = {};
+    requisitions.forEach(r => {
+      const dLoc = (r.destination || r.destLoc || "").toUpperCase().trim();
+      if (!dLoc) return;
+      
+      let norm = dLoc.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+      
+      if (dLoc.includes('PARI CHOWK')) norm = 'Pari Chowk';
+      else if (dLoc.includes('KNOWLEDGE PARK')) norm = 'Knowledge Park';
+      else if (dLoc.includes('NEW DELHI RAILWAY') || dLoc === 'NDLS') norm = 'New Delhi Railway Station';
+      else if (dLoc.includes('SECTOR 62') || dLoc.includes('SEC 62') || dLoc.includes('SECTOR-62')) norm = 'Noida Sector 62';
+      else if (dLoc.includes('SECTOR 18') || dLoc.includes('SEC 18') || dLoc.includes('SECTOR-18')) norm = 'Noida Sector 18';
+      else if (dLoc.includes('IGI AIRPORT') || dLoc.includes('DELHI AIRPORT') || dLoc.includes('INDIRA GANDHI')) norm = 'IGI Airport';
+      else if (dLoc.includes('GREATER NOIDA')) norm = 'Greater Noida';
+      else if (dLoc.includes('NOIDA')) norm = 'Noida';
+      else if (dLoc.includes('FARIDABAD')) norm = 'Faridabad';
+      else if (dLoc.includes('GHAZIABAD')) norm = 'Ghaziabad';
+      else if (dLoc.includes('ANAND VIHAR')) norm = 'Anand Vihar';
+      else if (dLoc.includes('KASHMERE GATE') || dLoc.includes('ISBT')) norm = 'Kashmere Gate ISBT';
+      else if (dLoc.includes('BENNETT') || dLoc === 'BU') norm = 'Bennett University';
+      else if (dLoc.includes('NEW DELHI') || dLoc === 'DELHI') norm = 'New Delhi';
+      
+      destCounts[norm] = (destCounts[norm] || 0) + 1;
     });
+
+    const sortedDests = Object.entries(destCounts).sort((a, b) => b[1] - a[1]);
+    const destLabels = sortedDests.map(d => d[0]);
+    const destData = sortedDests.map(d => d[1]);
+
+    const containerDynamic = document.getElementById("dest-chart-container");
+    if (containerDynamic) {
+      const minHeight = Math.max(250, sortedDests.length * 35);
+      containerDynamic.style.minHeight = `${minHeight}px`;
+    }
 
     charts.dest = new Chart(ctxDest, {
       type: 'bar',
@@ -2669,11 +3048,8 @@ function closeDownloadReportModal() {
 function generateReportPreview() {
   const fromDate = document.getElementById("report-from-date").value;
   const toDate = document.getElementById("report-to-date").value;
-  const plant = document.getElementById("report-plant").value;
   const dept = document.getElementById("report-dept").value;
-  const journey = document.getElementById("report-journey-type").value;
   const category = document.getElementById("report-category").value;
-  const status = document.getElementById("report-status").value;
   const empId = document.getElementById("report-employee-id").value;
 
   if (!fromDate || !toDate) {
@@ -2685,11 +3061,8 @@ function generateReportPreview() {
     from_date: fromDate,
     to_date: toDate
   });
-  if (plant) params.append("plant_location", plant);
   if (dept) params.append("department", dept);
-  if (journey) params.append("journey_type", journey);
   if (category) params.append("vehicle_category", category);
-  if (status) params.append("status", status);
   if (empId) params.append("employee_id", empId);
 
   const statusMsgEl = document.getElementById("report-preview-status");
@@ -2740,11 +3113,8 @@ function handleDownloadReport(event) {
 
   const fromDate = document.getElementById("report-from-date").value;
   const toDate = document.getElementById("report-to-date").value;
-  const plant = document.getElementById("report-plant").value;
   const dept = document.getElementById("report-dept").value;
-  const journey = document.getElementById("report-journey-type").value;
   const category = document.getElementById("report-category").value;
-  const status = document.getElementById("report-status").value;
   const empId = document.getElementById("report-employee-id").value;
 
   if (!fromDate || !toDate) {
@@ -2756,11 +3126,8 @@ function handleDownloadReport(event) {
     from_date: fromDate,
     to_date: toDate
   });
-  if (plant) params.append("plant_location", plant);
   if (dept) params.append("department", dept);
-  if (journey) params.append("journey_type", journey);
   if (category) params.append("vehicle_category", category);
-  if (status) params.append("status", status);
   if (empId) params.append("employee_id", empId);
 
   const downloadUrl = `${API_BASE}/reports/export?${params.toString()}`;
@@ -2775,11 +3142,8 @@ function handleDownloadPDF(event) {
 
   const fromDate = document.getElementById("report-from-date").value;
   const toDate = document.getElementById("report-to-date").value;
-  const plant = document.getElementById("report-plant").value;
   const dept = document.getElementById("report-dept").value;
-  const journey = document.getElementById("report-journey-type").value;
   const category = document.getElementById("report-category").value;
-  const status = document.getElementById("report-status").value;
   const empId = document.getElementById("report-employee-id").value;
 
   if (!fromDate || !toDate) {
@@ -2791,11 +3155,8 @@ function handleDownloadPDF(event) {
     from_date: fromDate,
     to_date: toDate
   });
-  if (plant) params.append("plant_location", plant);
   if (dept) params.append("department", dept);
-  if (journey) params.append("journey_type", journey);
   if (category) params.append("vehicle_category", category);
-  if (status) params.append("status", status);
   if (empId) params.append("employee_id", empId);
 
   showToast("toast-info", "Generating PDF report...");
@@ -2833,7 +3194,7 @@ function handleDownloadPDF(event) {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(16);
       doc.setTextColor(255, 255, 255);
-      doc.text("JK Lakshmi Cement - Vehicle Requisition Report", 14, 16);
+      doc.text("Bennett University - Campus Transport Report", 14, 16);
 
       // Draw Summary Box (Two columns layout)
       doc.setFontSize(10);
@@ -2893,7 +3254,6 @@ function handleDownloadPDF(event) {
           cleanText(r.employee_name || ''),
           cleanText(r.department || ''),
           cleanText(r.mobile_number || ''),
-          cleanText(r.plant_location || ''),
           cleanText(r.journey_type || ''),
           cleanText(r.category || ''),
           cleanText(r.purpose || ''),
@@ -2920,7 +3280,7 @@ function handleDownloadPDF(event) {
 
       const headers = [
         "Requisition Number (REQ No.)", "Request Date (REQ Date)", "Employee ID", "Employee Name", "Department",
-        "Mobile Number", "Plant / Office", "Journey Type", "Vehicle Category", "Purpose of Request",
+        "Mobile Number", "Journey Type", "Vehicle Category", "Purpose of Request",
         "Pickup Location", "Drop Location", "Pickup Date", "Pickup Time", "Return Date",
         "Return Time", "Passenger Count", "Guest Name", "Guest Mobile", "Request Remarks",
         "Request Status", "Allocation Status", "Assigned Vehicle Number", "Assigned Driver",
@@ -2977,91 +3337,96 @@ function handleDownloadPDF(event) {
     });
 }
 
+function renderFleetTable() {
+  const countBadge = document.getElementById("fleet-count-badge");
+  if (countBadge) countBadge.innerText = `Total: ${fleet.length} vehicles`;
+
+  const session = localStorage.getItem(AUTH_KEY);
+  let userRole = "";
+  if (session) {
+    try {
+      userRole = JSON.parse(session).role;
+    } catch (e) { }
+  }
+
+  const tbody = document.querySelector("#registered-vehicles-table tbody");
+  if (tbody) {
+    tbody.innerHTML = "";
+    if (!fleet || fleet.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:20px;">No vehicles registered.</td></tr>`;
+    } else {
+      fleet.forEach(v => {
+        let badgeClass = "badge-pending";
+        if (v.status === "Available") badgeClass = "badge-approved";
+        else if (v.status === "On Trip") badgeClass = "badge-progress";
+        else if (v.status === "Maintenance") badgeClass = "badge-rejected";
+
+        let maintSelectHTML = "";
+        if (v.status !== "On Trip" && (userRole === "TransportDesk" || userRole === "TransportOffice")) {
+          maintSelectHTML = `
+            <div class="status-checkbox-wrapper" data-status="${v.status}">
+              <select class="status-checkbox-select" onchange="handleStatusOrDelete('${v.vehicleNo}', this)">
+                <option value="Available" ${v.status === 'Available' ? 'selected' : ''}>Available</option>
+                <option value="Maintenance" ${v.status === 'Maintenance' ? 'selected' : ''}>Maintenance</option>
+                <option value="Delete" style="color: #ef4444 !important; font-weight: 600;">Delete Vehicle</option>
+              </select>
+            </div>
+          `;
+        }
+
+        tbody.innerHTML += `
+          <tr>
+            <td data-label="Vehicle No"><strong>${v.vehicleNo}</strong></td>
+            <td data-label="Model & Category">
+              <div style="font-weight:600;">${v.modelName}</div>
+              <div style="font-size:11px; color:var(--text-muted);">${v.category}</div>
+            </td>
+            <td data-label="Driver Info">
+              <div style="font-weight:600;">${v.driverName}</div>
+              <div style="font-size:11px; color:var(--text-muted);">${v.driverMobNo || ''}</div>
+            </td>
+            <td data-label="Status">
+              <div style="display: flex; align-items: center; justify-content: flex-end;">
+                <span class="badge ${badgeClass}">
+                  <span class="badge-dot"></span>
+                  ${v.status}
+                </span>
+              </div>
+            </td>
+            <td data-label="Actions" style="text-align: center; display: flex; justify-content: flex-end; align-items: center;">
+              ${maintSelectHTML || '—'}
+            </td>
+          </tr>
+        `;
+      });
+    }
+  }
+}
+
 function loadVehicles() {
   fetch(API_BASE + '/vehicles')
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
     .then(data => {
-      // Map database row keys to match fleet array structure in frontend
-      fleet = data.map(v => ({
-        id: String(v.id),
-        vehicleNo: v.vehicle_no,
-        modelName: v.model_name,
-        category: v.vehicle_category,
-        driverName: v.driver_name,
-        driverMobNo: v.driver_mob_no,
-        status: v.status,
-        rate: v.vehicle_category === 'Hatchback' ? 8 : (v.vehicle_category === 'Sedan' ? 12 : (v.vehicle_category === 'Premium Sedan' ? 18 : (v.vehicle_category === 'SUV' ? 18 : 35)))
-      }));
-
-      // Update fleet count badge
-      const countBadge = document.getElementById("fleet-count-badge");
-      if (countBadge) countBadge.innerText = `Total: ${fleet.length} vehicles`;
-
-      // Render the table
-      const session = localStorage.getItem(AUTH_KEY);
-      let userRole = "";
-      if (session) {
-        try {
-          userRole = JSON.parse(session).role;
-        } catch (e) { }
+      if (Array.isArray(data)) {
+        fleet = data.map(v => ({
+          id: String(v.id),
+          vehicleNo: v.vehicle_no,
+          modelName: v.model_name,
+          category: v.vehicle_category,
+          driverName: v.driver_name,
+          driverMobNo: v.driver_mob_no,
+          status: v.status,
+          rate: v.vehicle_category === 'Hatchback' ? 8 : (v.vehicle_category === 'Sedan' ? 12 : (v.vehicle_category === 'Premium Sedan' ? 18 : (v.vehicle_category === 'SUV' ? 18 : 35)))
+        }));
       }
-
-      const tbody = document.querySelector("#registered-vehicles-table tbody");
-      if (tbody) {
-        tbody.innerHTML = "";
-        if (fleet.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:20px;">No vehicles registered.</td></tr>`;
-        } else {
-          fleet.forEach(v => {
-            let badgeClass = "badge-pending";
-            if (v.status === "Available") badgeClass = "badge-approved";
-            else if (v.status === "On Trip") badgeClass = "badge-progress";
-            else if (v.status === "Maintenance") badgeClass = "badge-rejected";
-
-            let maintSelectHTML = "";
-            if (v.status !== "On Trip" && userRole === "TransportDesk") {
-              maintSelectHTML = `
-                <div class="status-checkbox-wrapper" data-status="${v.status}">
-                  <select class="status-checkbox-select" onchange="handleStatusOrDelete('${v.vehicleNo}', this)">
-                    <option value="Available" ${v.status === 'Available' ? 'selected' : ''}>Available</option>
-                    <option value="Maintenance" ${v.status === 'Maintenance' ? 'selected' : ''}>Maintenance</option>
-                    <option value="Delete" style="color: #ef4444 !important; font-weight: 600;">Delete Vehicle</option>
-                  </select>
-                </div>
-              `;
-            }
-
-            tbody.innerHTML += `
-              <tr>
-                <td data-label="Vehicle No"><strong>${v.vehicleNo}</strong></td>
-                <td data-label="Model & Category">
-                  <div style="font-weight:600;">${v.modelName}</div>
-                  <div style="font-size:11px; color:var(--text-muted);">${v.category}</div>
-                </td>
-                <td data-label="Driver Info">
-                  <div style="font-weight:600;">${v.driverName}</div>
-                  <div style="font-size:11px; color:var(--text-muted);">${v.driverMobNo || ''}</div>
-                </td>
-                <td data-label="Status">
-                  <div style="display: flex; align-items: center; justify-content: flex-end;">
-                    <span class="badge ${badgeClass}">
-                      <span class="badge-dot"></span>
-                      ${v.status}
-                    </span>
-                  </div>
-                </td>
-                <td data-label="Actions" style="text-align: center; display: flex; justify-content: flex-end; align-items: center;">
-                  ${maintSelectHTML || '—'}
-                </td>
-              </tr>
-            `;
-          });
-        }
-      }
+      renderFleetTable();
     })
     .catch(err => {
-      console.error("Error loading vehicles:", err);
-      showToast("toast-danger", "Failed to load vehicle fleet from database.");
+      console.warn("Could not load vehicles from server, using local fleet state:", err);
+      renderFleetTable();
     });
 }
 
@@ -3211,3 +3576,80 @@ window.addEventListener('resize', () => {
     }, 250);
   }
 });
+
+// Driver Complete Trip Logic
+let activeCompleteReqId = null;
+
+function openDriverCompleteModal(reqId) {
+  const req = requisitions.find(r => String(r.id) === String(reqId));
+  if (!req) return;
+
+  activeCompleteReqId = reqId;
+  document.getElementById("complete-modal-req-id").innerText = req.id;
+  document.getElementById("complete-modal-route").innerText = `${req.pickup} to ${req.dropoff}`;
+  document.getElementById("complete-modal-vehicle").innerText = req.vehicleNo;
+
+  document.getElementById("driver-complete-modal").classList.add("active");
+}
+
+function closeDriverCompleteModal() {
+  document.getElementById("driver-complete-modal").classList.remove("active");
+  activeCompleteReqId = null;
+}
+
+function confirmDriverCompleteTrip() {
+  if (!activeCompleteReqId) return;
+
+  const req = requisitions.find(r => String(r.id) === String(activeCompleteReqId));
+  if (!req) return;
+
+  const session = localStorage.getItem(AUTH_KEY);
+  if (!session) return;
+  const user = JSON.parse(session);
+
+  const btn = document.getElementById("btn-confirm-complete-trip");
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Completing...';
+  btn.disabled = true;
+
+  fetch(API_BASE + '/driver/trip-status', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-employee-id': user.employee_id
+    },
+    body: JSON.stringify({
+      request_id: req.request_id || req.id,
+      trip_status: 'Complete Trip',
+      driver_id: user.employee_id
+    })
+  })
+    .then(res => res.json().then(data => ({ status: res.status, ok: res.ok, body: data })))
+    .then(response => {
+      if (!response.ok) {
+        showToast("toast-danger", response.body.message || "Failed to complete trip.");
+      } else {
+        showToast("toast-success", "Trip successfully completed!");
+        // Update locally
+        req.status = "TRIP COMPLETED";
+        req.logs.push({ step: "Trip Completed", time: new Date().toTimeString().slice(0, 5) });
+        const v = fleet.find(veh => veh.vehicleNo === req.vehicleNo);
+        if (v) v.status = "Available";
+        
+        closeDriverCompleteModal();
+        updateDashboardStats();
+        renderRecentRequests();
+        renderWorkflowTimeline(workflowFilter);
+      }
+    })
+    .catch(err => {
+      console.error("Error completing trip:", err);
+      showToast("toast-danger", "Server error completing trip.");
+    })
+    .finally(() => {
+      btn.innerHTML = '<i class="fa-solid fa-check"></i> Complete Trip';
+      btn.disabled = false;
+    });
+}
+window.openDriverCompleteModal = openDriverCompleteModal;
+window.closeDriverCompleteModal = closeDriverCompleteModal;
+window.confirmDriverCompleteTrip = confirmDriverCompleteTrip;

@@ -1,8 +1,10 @@
 // backend/controllers/hodController.js
 // Handles HOD action approvals and department requisition filters
+// Bennett University Campus Transport Management System
 
 const Request = require('../models/Request');
 const Employee = require('../models/Employee');
+const db = require('../db');
 
 // Format database row to frontend JSON structure
 function formatRequest(row) {
@@ -70,7 +72,7 @@ exports.getPendingHOD = async (req, res) => {
     const employeeId = req.headers['x-employee-id'] || req.query.employeeId || req.query.employee_id;
 
     if (!employeeId) {
-      return res.status(400).json({ success: false, message: 'Employee ID is required.' });
+      return res.status(400).json({ success: false, message: 'User ID is required.' });
     }
 
     const employee = await Employee.findById(employeeId);
@@ -78,7 +80,8 @@ exports.getPendingHOD = async (req, res) => {
       return res.status(403).json({ success: false, message: 'Unauthorized. HOD role required.' });
     }
 
-    // Find all requests to allow HOD to see full analytics (frontend filters by department for lists)
+    // HOD sees all requests but frontend filters by their department for action lists
+    // We still return all non-draft requests so HOD dashboard analytics work correctly
     const rows = await Request.findAll();
     const departmentRequests = rows.filter(r => r.status !== 'Draft').map(formatRequest);
 
@@ -91,14 +94,13 @@ exports.getPendingHOD = async (req, res) => {
 
 exports.approveRequest = async (req, res) => {
   try {
-    const { request_id, hod_approved_by } = req.body;
+    const { request_id, hod_approved_by, remarks } = req.body;
     let requestId = request_id;
     if (typeof request_id === 'string') {
-      if (request_id.startsWith('REQ-2026-')) {
-        requestId = parseInt(request_id.replace('REQ-2026-', ''), 10);
-      } else if (/^\d{8}$/.test(request_id)) {
-        requestId = parseInt(request_id.substring(6), 10);
-      } else if (/^\d{7}$/.test(request_id)) {
+      if (request_id.startsWith('REQ-')) {
+        const parts = request_id.split('-');
+        requestId = parseInt(parts[parts.length - 1], 10);
+      } else if (/^20\d{2}\d{3,}$/.test(request_id)) {
         requestId = parseInt(request_id.substring(4), 10);
       } else if (/^\d+$/.test(request_id)) {
         requestId = parseInt(request_id, 10);
@@ -106,8 +108,12 @@ exports.approveRequest = async (req, res) => {
     }
 
     if (!requestId || !hod_approved_by) {
-      return res.status(400).json({ success: false, message: 'request_id and HOD employee ID are required.' });
+      return res.status(400).json({ success: false, message: 'request_id and HOD ID are required.' });
     }
+
+    let cleanHODId = (hod_approved_by || 'HOD201').trim();
+    if (cleanHODId.toUpperCase() === 'EMP101') cleanHODId = 'FAC101';
+    if (cleanHODId.toUpperCase() === 'EMP102') cleanHODId = 'FAC102';
 
     const request = await Request.findById(requestId);
     if (!request) {
@@ -117,10 +123,19 @@ exports.approveRequest = async (req, res) => {
     const logs = request.logs ? (typeof request.logs === 'string' ? JSON.parse(request.logs) : request.logs) : [];
     logs.push({
       step: 'HOD Approved',
-      time: new Date().toISOString().replace('T', ' ').slice(0, 16)
+      time: new Date().toISOString().replace('T', ' ').slice(0, 16),
+      remark: remarks || ''
     });
 
-    await Request.updateHODApproval(requestId, 'HOD APPROVED', hod_approved_by, logs);
+    await Request.updateHODApproval(requestId, 'HOD Approved', cleanHODId, logs);
+
+    // Audit Trail: Log HOD_APPROVED
+    const authEmpId = req.headers['x-employee-id'] || cleanHODId;
+    const actualReqNo = Request.getReqNo(requestId);
+    await db.execute(
+      'INSERT INTO request_history (REQNO, action, performed_by, performed_at, remarks) VALUES (?, ?, ?, NOW(), ?)',
+      [actualReqNo, 'HOD_APPROVED', authEmpId, remarks || null]
+    );
 
     return res.status(200).json({
       success: true,
@@ -128,20 +143,19 @@ exports.approveRequest = async (req, res) => {
     });
   } catch (error) {
     console.error('Error approving request:', error);
-    return res.status(500).json({ success: false, message: 'Internal server error.' });
+    return res.status(500).json({ success: false, message: 'Internal server error: ' + error.message });
   }
 };
 
 exports.rejectRequest = async (req, res) => {
   try {
-    const { request_id, hod_approved_by } = req.body;
+    const { request_id, hod_approved_by, remarks } = req.body;
     let requestId = request_id;
     if (typeof request_id === 'string') {
-      if (request_id.startsWith('REQ-2026-')) {
-        requestId = parseInt(request_id.replace('REQ-2026-', ''), 10);
-      } else if (/^\d{8}$/.test(request_id)) {
-        requestId = parseInt(request_id.substring(6), 10);
-      } else if (/^\d{7}$/.test(request_id)) {
+      if (request_id.startsWith('REQ-')) {
+        const parts = request_id.split('-');
+        requestId = parseInt(parts[parts.length - 1], 10);
+      } else if (/^20\d{2}\d{3,}$/.test(request_id)) {
         requestId = parseInt(request_id.substring(4), 10);
       } else if (/^\d+$/.test(request_id)) {
         requestId = parseInt(request_id, 10);
@@ -149,8 +163,12 @@ exports.rejectRequest = async (req, res) => {
     }
 
     if (!requestId || !hod_approved_by) {
-      return res.status(400).json({ success: false, message: 'request_id and HOD employee ID are required.' });
+      return res.status(400).json({ success: false, message: 'request_id and HOD ID are required.' });
     }
+
+    let cleanHODId = (hod_approved_by || 'HOD201').trim();
+    if (cleanHODId.toUpperCase() === 'EMP101') cleanHODId = 'FAC101';
+    if (cleanHODId.toUpperCase() === 'EMP102') cleanHODId = 'FAC102';
 
     const request = await Request.findById(requestId);
     if (!request) {
@@ -160,10 +178,19 @@ exports.rejectRequest = async (req, res) => {
     const logs = request.logs ? (typeof request.logs === 'string' ? JSON.parse(request.logs) : request.logs) : [];
     logs.push({
       step: 'HOD Rejected',
-      time: new Date().toISOString().replace('T', ' ').slice(0, 16)
+      time: new Date().toISOString().replace('T', ' ').slice(0, 16),
+      remark: remarks || ''
     });
 
-    await Request.updateHODApproval(requestId, 'REJECTED', hod_approved_by, logs);
+    await Request.updateHODApproval(requestId, 'REJECTED', cleanHODId, logs);
+
+    // Audit Trail: Log HOD_REJECTED
+    const authEmpId = req.headers['x-employee-id'] || cleanHODId;
+    const actualReqNo = Request.getReqNo(requestId);
+    await db.execute(
+      'INSERT INTO request_history (REQNO, action, performed_by, performed_at, remarks) VALUES (?, ?, ?, NOW(), ?)',
+      [actualReqNo, 'HOD_REJECTED', authEmpId, remarks || null]
+    );
 
     return res.status(200).json({
       success: true,
@@ -171,6 +198,6 @@ exports.rejectRequest = async (req, res) => {
     });
   } catch (error) {
     console.error('Error rejecting request:', error);
-    return res.status(500).json({ success: false, message: 'Internal server error.' });
+    return res.status(500).json({ success: false, message: 'Internal server error: ' + error.message });
   }
 };

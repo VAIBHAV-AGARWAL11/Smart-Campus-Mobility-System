@@ -12,8 +12,13 @@ class Allocation {
    */
   static async create(data) {
     const reqNo = Request.getReqNo(data.request_id || data.req_no);
+    let assignedBy = (data.assigned_by || 'TO301').trim();
+    if (assignedBy.toUpperCase() === 'TD301') assignedBy = 'TO301';
+    if (assignedBy.toUpperCase() === 'EMP101') assignedBy = 'FAC101';
+    if (assignedBy.toUpperCase() === 'EMP102') assignedBy = 'FAC102';
+
     const sql = `
-      INSERT INTO vehicle_allocations ( 
+      INSERT INTO vehicle_allocations (
         REQNO, vehicle_number, driver_name, assigned_by, assigned_at
       ) VALUES (?, ?, ?, ?, ?)
     `;
@@ -21,7 +26,7 @@ class Allocation {
       reqNo,
       data.vehicle_number,
       data.driver_name,
-      data.assigned_by,
+      assignedBy,
       data.assigned_at || new Date()
     ];
     const [result] = await db.execute(sql, params);

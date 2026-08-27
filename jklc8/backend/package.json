@@ -1,11 +1,12 @@
 {
-  "name": "jklc-vehicle-portal-backend",
+  "name": "bennett-transport-portal-backend",
   "version": "1.0.0",
-  "description": "Full stack JK Lakshmi Vehicle Portal backend",
+  "description": "Bennett University Campus Transport Management System backend",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "init-db": "node init_db.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

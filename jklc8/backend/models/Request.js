@@ -1,9 +1,10 @@
 // backend/models/Request.js
 // Data access mapping layer for the VEHREQ database structure
+// Bennett University Campus Transport Management System
 
 const db = require('../db');
 
-// Global Distance matrix & lookup (shared logic with frontend)
+// Global Distance matrix & lookup for Bennett University / NCR region routes
 function getDistance(from, to) {
   if (!from || !to) return 0;
   const f = from.trim().toUpperCase();
@@ -15,136 +16,106 @@ function getDistance(from, to) {
   const key = [f, t].sort().join("-");
   
   const lookup = {
-    // Jaykaypuram routes
-    "ABU ROAD-JAYKAYPURAM": 25,
-    "AHMEDABAD-JAYKAYPURAM": 210,
-    "AJMER-JAYKAYPURAM": 310,
-    "ADARSH-JAYKAYPURAM": 35,
-    "BANAS-JAYKAYPURAM": 10,
-    "BARODA-JAYKAYPURAM": 340,
-    "BERMER-JAYKAYPURAM": 220,
-    "BIKANER-JAYKAYPURAM": 420,
-    "DHANARI-JAYKAYPURAM": 15,
-    "FALNA-JAYKAYPURAM": 95,
-    "JAIPUR-JAYKAYPURAM": 440,
-    "JAYKAYPURAM-JODHPUR": 240,
-    "JAYKAYPURAM-KOJRA": 15,
-    "JAYKAYPURAM-MT ABU": 50,
-    "JAYKAYPURAM-PALANPUR": 80,
-    "JAYKAYPURAM-PALI": 175,
-    "JAYKAYPURAM-PINDWARA": 30,
-    "JAYKAYPURAM-SHEOGANJ": 85,
-    "JAYKAYPURAM-SIROHI": 35,
-    "JAYKAYPURAM-SIROHI ROAD": 25,
-    "JAYKAYPURAM-SUMERPUR": 85,
-    "JAYKAYPURAM-SWARUPGANJ": 10,
-    "JAYKAYPURAM-TALETI": 20,
-    "JAYKAYPURAM-UDAIPUR": 140,
+    // Bennett University Campus routes
+    "BENNETT UNIVERSITY-GREATER NOIDA": 8,
+    "BENNETT UNIVERSITY-NOIDA": 25,
+    "BENNETT UNIVERSITY-NOIDA SECTOR 62": 30,
+    "BENNETT UNIVERSITY-KNOWLEDGE PARK": 5,
+    "BENNETT UNIVERSITY-PARI CHOWK": 10,
+    "BENNETT UNIVERSITY-DELHI": 55,
+    "BENNETT UNIVERSITY-NEW DELHI RAILWAY STATION": 50,
+    "BENNETT UNIVERSITY-IGI AIRPORT": 60,
+    "BENNETT UNIVERSITY-GURGAON": 70,
+    "BENNETT UNIVERSITY-FARIDABAD": 45,
+    "BENNETT UNIVERSITY-GHAZIABAD": 50,
+    "BENNETT UNIVERSITY-AGRA": 180,
+    "BENNETT UNIVERSITY-MATHURA": 140,
+    "BENNETT UNIVERSITY-ALIGARH": 100,
+    "BENNETT UNIVERSITY-MEERUT": 80,
+    "BENNETT UNIVERSITY-BULANDSHAHR": 55,
+    "BENNETT UNIVERSITY-HAPUR": 65,
+    "BENNETT UNIVERSITY-JEWAR AIRPORT": 15,
+    "BENNETT UNIVERSITY-KASNA": 6,
+    "BENNETT UNIVERSITY-ALPHA 1": 20,
+    "BENNETT UNIVERSITY-GAUR CITY": 12,
     
-    // Abu Road routes
-    "ABU ROAD-AHMEDABAD": 190,
-    "ABU ROAD-AJMER": 330,
-    "ABU ROAD-ADARSH": 15,
-    "ABU ROAD-BANAS": 30,
-    "ABU ROAD-BARODA": 320,
-    "ABU ROAD-BERMER": 260,
-    "ABU ROAD-BIKANER": 450,
-    "ABU ROAD-DHANARI": 35,
-    "ABU ROAD-FALNA": 145,
-    "ABU ROAD-JAIPUR": 465,
-    "ABU ROAD-JODHPUR": 215,
-    "ABU ROAD-KOJRA": 40,
-    "ABU ROAD-MT ABU": 28,
-    "ABU ROAD-PALANPUR": 55,
-    "ABU ROAD-PALI": 185,
-    "ABU ROAD-PINDWARA": 55,
-    "ABU ROAD-SHEOGANJ": 135,
-    "ABU ROAD-SIROHI": 70,
-    "ABU ROAD-SIROHI ROAD": 45,
-    "ABU ROAD-SUMERPUR": 130,
-    "ABU ROAD-SWARUPGANJ": 30,
-    "ABU ROAD-TALETI": 5,
-    "ABU ROAD-UDAIPUR": 150,
+    // Greater Noida routes
+    "DELHI-GREATER NOIDA": 45,
+    "GREATER NOIDA-NOIDA": 18,
+    "GREATER NOIDA-NOIDA SECTOR 62": 22,
+    "GREATER NOIDA-KNOWLEDGE PARK": 4,
+    "GREATER NOIDA-PARI CHOWK": 6,
+    "GREATER NOIDA-NEW DELHI RAILWAY STATION": 42,
+    "GREATER NOIDA-IGI AIRPORT": 52,
+    "GREATER NOIDA-GURGAON": 62,
+    "GREATER NOIDA-FARIDABAD": 38,
+    "GREATER NOIDA-GHAZIABAD": 42,
+    "GREATER NOIDA-JEWAR AIRPORT": 20,
+    "GREATER NOIDA-KASNA": 3,
     
-    // Sirohi routes
-    "AHMEDABAD-SIROHI": 240,
-    "AJMER-SIROHI": 260,
-    "ADARSH-SIROHI": 85,
-    "BANAS-SIROHI": 65,
-    "BARODA-SIROHI": 370,
-    "BERMER-SIROHI": 200,
-    "BIKANER-SIROHI": 380,
-    "DHANARI-SIROHI": 50,
-    "FALNA-SIROHI": 75,
-    "JAIPUR-SIROHI": 390,
-    "JODHPUR-SIROHI": 180,
-    "KOJRA-SIROHI": 30,
-    "MT ABU-SIROHI": 80,
-    "PALANPUR-SIROHI": 115,
-    "PALI-SIROHI": 110,
-    "PINDWARA-SIROHI": 25,
-    "SHEOGANJ-SIROHI": 65,
-    "SIROHI-SIROHI ROAD": 25,
-    "SIROHI-SUMERPUR": 60,
-    "SIROHI-SWARUPGANJ": 45,
-    "SIROHI-TALETI": 65,
-    "SIROHI-UDAIPUR": 120,
+    // Delhi routes
+    "DELHI-NOIDA": 20,
+    "DELHI-GURGAON": 30,
+    "DELHI-FARIDABAD": 25,
+    "DELHI-GHAZIABAD": 15,
+    "DELHI-IGI AIRPORT": 15,
+    "DELHI-NEW DELHI RAILWAY STATION": 5,
+    "DELHI-AGRA": 210,
+    "DELHI-MATHURA": 165,
+    "DELHI-ALIGARH": 130,
+    "DELHI-MEERUT": 70,
     
-    // Banas routes
-    "AHMEDABAD-BANAS": 220,
-    "AJMER-BANAS": 300,
-    "ADARSH-BANAS": 45,
-    "BANAS-BARODA": 350,
-    "BANAS-BERMER": 210,
-    "BANAS-BIKANER": 410,
-    "BANAS-DHANARI": 25,
-    "BANAS-FALNA": 90,
-    "BANAS-JAIPUR": 430,
-    "BANAS-JODHPUR": 235,
-    "BANAS-KOJRA": 25,
-    "BANAS-MT ABU": 60,
-    "BANAS-PALANPUR": 90,
-    "BANAS-PALI": 165,
-    "BANAS-PINDWARA": 20,
-    "BANAS-SHEOGANJ": 80,
-    "BANAS-SIROHI ROAD": 15,
-    "BANAS-SUMERPUR": 80,
-    "BANAS-SWARUPGANJ": 15,
-    "BANAS-TALETI": 30,
-    "BANAS-UDAIPUR": 135
+    // Noida routes
+    "NOIDA-NOIDA SECTOR 62": 8,
+    "FARIDABAD-NOIDA": 28,
+    "GHAZIABAD-NOIDA": 22,
+    "IGI AIRPORT-NOIDA": 35,
+    "GURGAON-NOIDA": 42,
+    "NOIDA-PARI CHOWK": 15,
+    
+    // Airport routes
+    "IGI AIRPORT-GURGAON": 18,
+    "IGI AIRPORT-FARIDABAD": 38,
+    "IGI AIRPORT-GHAZIABAD": 35,
+    "IGI AIRPORT-JEWAR AIRPORT": 75,
+    
+    // Other cross routes
+    "AGRA-MATHURA": 55,
+    "AGRA-ALIGARH": 85,
+    "ALIGARH-MATHURA": 60,
+    "FARIDABAD-GURGAON": 35,
+    "GHAZIABAD-MEERUT": 55,
+    "BULANDSHAHR-HAPUR": 40
   };
 
   if (lookup[key] !== undefined) {
     return lookup[key];
   }
 
-  // Fallback coordinates
+  // Fallback coordinates for NCR region
   const coords = {
-    "ABU ROAD": [24.48, 72.78],
-    "AHMEDABAD": [23.02, 72.57],
-    "AJMER": [26.45, 74.64],
-    "ADARSH": [24.43, 72.75],
-    "BANAS": [24.63, 72.85],
-    "BARODA": [22.31, 73.18],
-    "BERMER": [25.75, 71.42],
-    "BIKANER": [28.02, 73.31],
-    "DHANARI": [24.64, 72.78],
-    "FALNA": [25.23, 73.24],
-    "JAIPUR": [26.91, 75.79],
-    "JAYKAYPURAM": [24.60, 72.85],
-    "JODHPUR": [26.24, 73.02],
-    "KOJRA": [24.77, 72.88],
-    "MT ABU": [24.59, 72.72],
-    "PALANPUR": [24.17, 72.43],
-    "PALI": [25.77, 73.32],
-    "PINDWARA": [24.79, 73.05],
-    "SHEOGANJ": [25.15, 73.06],
-    "SIROHI": [24.88, 72.86],
-    "SIROHI ROAD": [24.75, 72.95],
-    "SUMERPUR": [25.15, 73.08],
-    "SWARUPGANJ": [24.69, 72.92],
-    "TALETI": [24.51, 72.76],
-    "UDAIPUR": [24.59, 73.71]
+    "BENNETT UNIVERSITY": [28.45, 77.58],
+    "GREATER NOIDA": [28.47, 77.50],
+    "NOIDA": [28.57, 77.32],
+    "NOIDA SECTOR 62": [28.62, 77.36],
+    "KNOWLEDGE PARK": [28.46, 77.53],
+    "PARI CHOWK": [28.47, 77.52],
+    "DELHI": [28.70, 77.10],
+    "NEW DELHI RAILWAY STATION": [28.64, 77.22],
+    "IGI AIRPORT": [28.55, 77.10],
+    "GURGAON": [28.46, 77.03],
+    "FARIDABAD": [28.41, 77.31],
+    "GHAZIABAD": [28.67, 77.42],
+    "AGRA": [27.18, 78.02],
+    "MATHURA": [27.49, 77.67],
+    "ALIGARH": [27.88, 78.08],
+    "MEERUT": [28.98, 77.71],
+    "BULANDSHAHR": [28.41, 77.85],
+    "HAPUR": [28.73, 77.78],
+    "JEWAR AIRPORT": [28.31, 77.61],
+    "KASNA": [28.44, 77.55],
+    "ALPHA 1": [28.57, 77.39],
+    "GAUR CITY": [28.47, 77.54]
   };
 
   const c1 = coords[f];
@@ -161,7 +132,7 @@ function getDistance(from, to) {
               Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const straightDist = R * c;
-    const factor = (f.includes("UDAIPUR") || t.includes("UDAIPUR") || f.includes("MT ABU") || t.includes("MT ABU")) ? 1.5 : 1.25;
+    const factor = 1.35; // NCR road factor
     return Math.round(straightDist * factor);
   }
 
@@ -178,6 +149,12 @@ class Request {
   static getReqNo(id) {
     if (!id) return id;
     const strId = String(id);
+    
+    // If it already looks like a REQNO (starts with year), return it directly
+    if (/^20\d{2}\d+$/.test(strId)) {
+      return strId;
+    }
+    
     if (/^\d{7,}$/.test(strId)) {
       return strId;
     }
@@ -193,9 +170,12 @@ class Request {
    * @returns {string}
    */
   static async getNextReqNo() {
-    const [rows] = await db.execute("SELECT REQNO FROM vehreq ORDER BY REQNO DESC LIMIT 1");
-    const latest = rows[0]?.REQNO;
     const currentYear = new Date().getFullYear();
+    const [rows] = await db.execute(
+      "SELECT REQNO FROM vechreq WHERE REQNO LIKE ? ORDER BY REQNO DESC LIMIT 1",
+      [`${currentYear}%`]
+    );
+    const latest = rows[0]?.REQNO;
     let nextSeq = 1;
     if (latest && latest.startsWith(currentYear.toString())) {
       const seqStr = latest.substring(4);
@@ -204,7 +184,7 @@ class Request {
         nextSeq = parsed + 1;
       }
     }
-    return `${currentYear}${String(nextSeq).padStart(3, '0')}`;
+    return `${currentYear}${nextSeq}`;
   }
 
   /**
@@ -215,41 +195,45 @@ class Request {
   static async create(data) {
     const reqNo = await Request.getNextReqNo();
     const sql = `
-      INSERT INTO vehreq (
+      INSERT INTO vechreq (
         LOCATION, REQLOCATION, REQNO, REQDT, REQTYP,
         FROMDEST, TODEST, FROMDATE, TODATE, PICKPOINT, DROPOINT,
         APPFLG, RECFLG, DETAILS, NOPER, REQBY, MOBNO, FORTHEEMP,
-        VRQ_CATG, VRQ_CATG_DESC, COST_CENTER, FARE_AMOUNT, RETURNFLG
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VRQ_CATG, VRQ_CATG_DESC, COST_CENTER, FARE_AMOUNT, RETURNFLG,
+        RECREM, GSTNM, GSTCONTMOBNO
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     const fromDate = data.pickup_datetime ? new Date(data.pickup_datetime) : null;
     const toDate = data.return_datetime ? new Date(data.return_datetime) : null;
 
     const params = [
-      data.plant_location, // LOCATION
-      data.plant_location, // REQLOCATION
+      (data.plant_location || '').substring(0, 100), // LOCATION
+      (data.plant_location || '').substring(0, 100), // REQLOCATION
       reqNo,               // REQNO
       new Date(),          // REQDT
-      data.journey_type,   // REQTYP
-      data.from_location,  // FROMDEST
-      data.to_location,    // TODEST
+      (data.journey_type || '').substring(0, 50),   // REQTYP
+      (data.from_location || '').substring(0, 100),  // FROMDEST
+      (data.to_location || '').substring(0, 100),    // TODEST
       fromDate,            // FROMDATE
       toDate,              // TODATE
-      data.pickup_point,   // PICKPOINT
-      data.drop_point || null, // DROPOINT
+      (data.pickup_point || '').substring(0, 100),   // PICKPOINT
+      data.drop_point ? String(data.drop_point).substring(0, 100) : null, // DROPOINT
       data.status === 'Draft' ? 'DRAFT' : 'PENDING', // APPFLG
       'PENDING',           // RECFLG
-      data.purpose,        // DETAILS
-      data.passengers,     // NOPER
+      (data.purpose || '').substring(0, 100),        // DETAILS
+      data.passengers || 1, // NOPER
       data.employee_id,    // REQBY
-      data.mobile_number,  // MOBNO
-      data.employee_id,    // FORTHEEMP (storing employee ID/username instead of name)
-      data.vehicle_category, // VRQ_CATG
-      data.category,       // VRQ_CATG_DESC
-      data.cost_center || '100', // COST_CENTER
+      (data.mobile_number || '').substring(0, 13),  // MOBNO
+      data.employee_id,    // FORTHEEMP (storing faculty ID)
+      (data.vehicle_category || '').substring(0, 4), // VRQ_CATG
+      (data.category || '').substring(0, 255),       // VRQ_CATG_DESC
+      (data.cost_center || '100').substring(0, 20),  // COST_CENTER
       data.cost || 0.00,   // FARE_AMOUNT
-      data.return_journey_required ? 1 : 0 // RETURNFLG
+      data.return_journey_required ? 1 : 0, // RETURNFLG
+      (data.remarks || '').substring(0, 80), // RECREM
+      (data.guest_name || '').substring(0, 45), // GSTNM
+      (data.guest_mobile || '').substring(0, 13) // GSTCONTMOBNO
     ];
 
     await db.execute(sql, params);
@@ -273,20 +257,26 @@ class Request {
       }
     }
 
-    // Workflow Status Mapping:
-    let status = 'REQUEST SUBMITTED';
+    // Workflow Status Mapping (Bennett University statuses)
+    let status = 'Pending HOD Approval';
     if (row.APPFLG === 'DRAFT') {
       status = 'Draft';
+    } else if (row.APPFLG === 'CANCELLED') {
+      status = 'Cancelled';
     } else if (row.APPFLG === 'REJECTED') {
-      status = 'REJECTED';
+      status = 'HOD Rejected';
     } else if (row.GATEFLG === 'COMPLETED') {
-      status = 'TRIP COMPLETED';
+      status = 'Trip Completed';
+    } else if (row.GATEFLG === 'STARTED') {
+      status = 'Trip Started';
+    } else if (row.GATEFLG === 'DRIVER_ASSIGNED') {
+      status = 'Driver Assigned';
     } else if (row.GATEFLG === 'ASSIGNED') {
-      status = 'VEHICLE ASSIGNED';
+      status = 'Vehicle Assigned';
     } else if (row.APPFLG === 'APPROVED') {
-      status = 'HOD APPROVED';
+      status = 'HOD Approved';
     } else if (row.APPFLG === 'PENDING') {
-      status = 'REQUEST SUBMITTED';
+      status = 'Pending HOD Approval';
     }
 
     // Parse times
@@ -311,26 +301,56 @@ class Request {
       returnMinute = toDate.getMinutes();
     }
 
-    // Reconstruct logs dynamically
+    // Reconstruct logs dynamically from history if provided, otherwise fallback gracefully
     const logs = [];
-    if (row.REQDT) {
-      const timeStr = new Date(row.REQDT).toISOString().replace('T', ' ').slice(0, 16);
-      logs.push({ step: 'Requested', time: timeStr });
-    }
-    if (row.APPFLG === 'APPROVED') {
-      const timeStr = fromDate ? fromDate.toISOString().replace('T', ' ').slice(0, 16) : new Date().toISOString().replace('T', ' ').slice(0, 16);
-      logs.push({ step: 'Approved by HOD', time: timeStr, remark: row.APPREM || '' });
-    } else if (row.APPFLG === 'REJECTED') {
-      const timeStr = fromDate ? fromDate.toISOString().replace('T', ' ').slice(0, 16) : new Date().toISOString().replace('T', ' ').slice(0, 16);
-      logs.push({ step: 'Rejected by HOD', time: timeStr, remark: row.APPREM || '' });
-    }
-    if (row.GATEFLG === 'ASSIGNED' || row.GATEFLG === 'COMPLETED') {
-      const timeStr = fromDate ? fromDate.toISOString().replace('T', ' ').slice(0, 16) : new Date().toISOString().replace('T', ' ').slice(0, 16);
-      logs.push({ step: 'Vehicle Allocated', time: timeStr });
-    }
-    if (row.GATEFLG === 'COMPLETED') {
-      const timeStr = toDate ? toDate.toISOString().replace('T', ' ').slice(0, 16) : new Date().toISOString().replace('T', ' ').slice(0, 16);
-      logs.push({ step: 'Trip Completed', time: timeStr });
+    if (row.history && row.history.length > 0) {
+      // Use real database timestamps
+      row.history.forEach(h => {
+        let stepName = h.action;
+        if (h.action === 'REQUEST_SUBMITTED') stepName = 'Request Submitted';
+        else if (h.action === 'HOD_APPROVED') stepName = 'HOD Approved';
+        else if (h.action === 'HOD_REJECTED') stepName = 'HOD Rejected';
+        else if (h.action === 'TRANSPORT_ALLOCATED') stepName = 'Transport Allocated';
+        else if (h.action === 'VEHICLE_ASSIGNED') stepName = 'Vehicle Assigned';
+        else if (h.action === 'DRIVER_ASSIGNED') stepName = 'Driver Assigned';
+        else if (h.action === 'TRIP_STARTED') stepName = 'Trip Started';
+        else if (h.action === 'TRIP_COMPLETED') stepName = 'Trip Completed';
+        
+        logs.push({
+          step: stepName,
+          time: new Date(h.performed_at).toISOString().replace('T', ' ').slice(0, 16),
+          remark: h.remarks || '',
+          performed_by_name: h.employee_name || h.performed_by,
+          performed_by_id: h.performed_by
+        });
+      });
+    } else {
+      // Legacy fallback logic without faking timestamps
+      if (row.REQDT) {
+        // We know REQDT is the real request date
+        const timeStr = new Date(row.REQDT).toISOString().replace('T', ' ').slice(0, 10) + ' 00:00';
+        logs.push({ step: 'Request Submitted', time: timeStr, legacy: true });
+      }
+      if (row.APPFLG === 'APPROVED') {
+        logs.push({ step: 'HOD Approved', time: 'Not Available', remark: row.APPREM || '', legacy: true });
+      } else if (row.APPFLG === 'REJECTED') {
+        logs.push({ step: 'HOD Rejected', time: 'Not Available', remark: row.APPREM || '', legacy: true });
+      } else if (row.APPFLG === 'CANCELLED') {
+        logs.push({ step: 'Cancelled by Faculty', time: 'Not Available', legacy: true });
+      }
+      
+      if (row.GATEFLG === 'ASSIGNED' || row.GATEFLG === 'DRIVER_ASSIGNED' || row.GATEFLG === 'STARTED' || row.GATEFLG === 'COMPLETED') {
+        logs.push({ step: 'Vehicle Assigned', time: 'Not Available', legacy: true });
+      }
+      if (row.GATEFLG === 'DRIVER_ASSIGNED' || row.GATEFLG === 'STARTED' || row.GATEFLG === 'COMPLETED') {
+        logs.push({ step: 'Driver Assigned', time: 'Not Available', legacy: true });
+      }
+      if (row.GATEFLG === 'STARTED' || row.GATEFLG === 'COMPLETED') {
+        logs.push({ step: 'Trip Started', time: 'Not Available', legacy: true });
+      }
+      if (row.GATEFLG === 'COMPLETED') {
+        logs.push({ step: 'Trip Completed', time: 'Not Available', legacy: true });
+      }
     }
 
     const isReturn = row.RETURNFLG === 1 || row.RETURNFLG === '1' || row.RETURNFLG === true || row.RETURNFLG === 'Y' || row.RETURNFLG === 'true';
@@ -354,10 +374,10 @@ class Request {
       pickup_datetime: fromDate,
       return_datetime: toDate,
       return_journey_required: isReturn ? 1 : 0,
-      travelling_with_guest: 0,
-      guest_name: '',
-      guest_mobile: '',
-      remarks: row.APPREM || '',
+      travelling_with_guest: row.GSTNM ? 1 : 0,
+      guest_name: row.GSTNM || '',
+      guest_mobile: row.GSTCONTMOBNO || '',
+      remarks: row.RECREM || row.APPREM || '',
       vehicle_category: row.VRQ_CATG,
       category: row.VRQ_CATG_DESC,
       status: status,
@@ -381,6 +401,25 @@ class Request {
     };
   }
 
+  static async fetchHistoryMap(reqNos) {
+    if (!reqNos || reqNos.length === 0) return {};
+    const placeholders = reqNos.map(() => '?').join(',');
+    const [historyRows] = await db.execute(`
+      SELECT h.*, e.employee_name 
+      FROM request_history h
+      LEFT JOIN employees e ON h.performed_by = e.employee_id
+      WHERE h.REQNO IN (${placeholders})
+      ORDER BY h.performed_at ASC
+    `, reqNos);
+    
+    const historyMap = {};
+    for (const h of historyRows) {
+       if (!historyMap[h.REQNO]) historyMap[h.REQNO] = [];
+       historyMap[h.REQNO].push(h);
+    }
+    return historyMap;
+  }
+
   /**
    * Get all vehicle requests sorted by latest first
    * @returns {Array}
@@ -388,11 +427,15 @@ class Request {
   static async findAll() {
     const [rows] = await db.execute(`
       SELECT r.*, e.employee_name, e.department 
-      FROM vehreq r 
+      FROM vechreq r 
       LEFT JOIN employees e ON r.REQBY = e.employee_id 
       ORDER BY r.REQNO DESC
     `);
-    return rows.map(Request.mapRow);
+    const historyMap = await Request.fetchHistoryMap(rows.map(r => r.REQNO));
+    return rows.map(r => {
+      r.history = historyMap[r.REQNO] || [];
+      return Request.mapRow(r);
+    });
   }
 
   /**
@@ -404,27 +447,37 @@ class Request {
     const reqNo = Request.getReqNo(id);
     const [rows] = await db.execute(`
       SELECT r.*, e.employee_name, e.department 
-      FROM vehreq r 
+      FROM vechreq r 
       LEFT JOIN employees e ON r.REQBY = e.employee_id 
       WHERE r.REQNO = ?
     `, [reqNo]);
-    return rows[0] ? Request.mapRow(rows[0]) : null;
+    
+    if (rows[0]) {
+      const historyMap = await Request.fetchHistoryMap([reqNo]);
+      rows[0].history = historyMap[reqNo] || [];
+      return Request.mapRow(rows[0]);
+    }
+    return null;
   }
 
   /**
-   * Get requests for a specific employee
+   * Get requests for a specific faculty member
    * @param {string} empId 
    * @returns {Array}
    */
   static async findByEmployeeId(empId) {
     const [rows] = await db.execute(`
       SELECT r.*, e.employee_name, e.department 
-      FROM vehreq r 
+      FROM vechreq r 
       LEFT JOIN employees e ON r.REQBY = e.employee_id 
       WHERE r.REQBY = ? 
       ORDER BY r.REQNO DESC
     `, [empId]);
-    return rows.map(Request.mapRow);
+    const historyMap = await Request.fetchHistoryMap(rows.map(r => r.REQNO));
+    return rows.map(r => {
+      r.history = historyMap[r.REQNO] || [];
+      return Request.mapRow(r);
+    });
   }
 
   /**
@@ -435,12 +488,16 @@ class Request {
   static async findByDepartment(dept) {
     const [rows] = await db.execute(`
       SELECT r.*, e.employee_name, e.department 
-      FROM vehreq r 
+      FROM vechreq r 
       LEFT JOIN employees e ON r.REQBY = e.employee_id 
       WHERE e.department = ? 
       ORDER BY r.REQNO DESC
     `, [dept]);
-    return rows.map(Request.mapRow);
+    const historyMap = await Request.fetchHistoryMap(rows.map(r => r.REQNO));
+    return rows.map(r => {
+      r.history = historyMap[r.REQNO] || [];
+      return Request.mapRow(r);
+    });
   }
 
   /**
@@ -448,7 +505,7 @@ class Request {
    * @returns {number}
    */
   static async getNextId() {
-    const [rows] = await db.execute("SELECT REQNO FROM vehreq ORDER BY REQNO DESC LIMIT 1");
+    const [rows] = await db.execute("SELECT REQNO FROM vechreq ORDER BY REQNO DESC LIMIT 1");
     const latest = rows[0]?.REQNO;
     const currentYear = new Date().getFullYear();
     let nextSeq = 1;
@@ -474,15 +531,21 @@ class Request {
     let gateFlg = null;
     let appFlg = null;
 
-    if (status === 'TRIP COMPLETED') {
+    if (status === 'Trip Completed' || status === 'TRIP COMPLETED') {
       gateFlg = 'COMPLETED';
-    } else if (status === 'VEHICLE ASSIGNED') {
+    } else if (status === 'Trip Started' || status === 'TRIP STARTED') {
+      gateFlg = 'STARTED';
+    } else if (status === 'Driver Assigned' || status === 'DRIVER_ASSIGNED') {
+      gateFlg = 'DRIVER_ASSIGNED';
+    } else if (status === 'Vehicle Assigned' || status === 'VEHICLE ASSIGNED') {
       gateFlg = 'ASSIGNED';
-    } else if (status === 'REJECTED') {
+    } else if (status === 'HOD Rejected' || status === 'REJECTED') {
       appFlg = 'REJECTED';
+    } else if (status === 'Cancelled' || status === 'CANCELLED') {
+      appFlg = 'CANCELLED';
     }
 
-    let sql = 'UPDATE vehreq SET ';
+    let sql = 'UPDATE vechreq SET ';
     const params = [];
     if (gateFlg) {
       sql += 'GATEFLG = ?';
@@ -504,6 +567,20 @@ class Request {
   }
 
   /**
+   * Cancel a request (only if it is still pending HOD approval)
+   * @param {string|number} id 
+   * @returns {boolean}
+   */
+  static async cancelRequest(id) {
+    const reqNo = Request.getReqNo(id);
+    const [result] = await db.execute(
+      "UPDATE vechreq SET APPFLG = 'CANCELLED' WHERE REQNO = ? AND APPFLG IN ('PENDING', 'DRAFT')",
+      [reqNo]
+    );
+    return result.affectedRows > 0;
+  }
+
+  /**
    * Update HOD Approval details
    * @param {string|number} id 
    * @param {string} status 
@@ -513,19 +590,21 @@ class Request {
    */
   static async updateHODApproval(id, status, HODEmployeeId, logs) {
     const reqNo = Request.getReqNo(id);
-    const appFlg = (status === 'APPROVED BY HOD' || status === 'HOD APPROVED' || status === 'APPROVED') ? 'APPROVED' : 'REJECTED';
+    const appFlg = (status === 'APPROVED BY HOD' || status === 'HOD APPROVED' || status === 'HOD Approved' || status === 'APPROVED') ? 'APPROVED' : 'REJECTED';
 
     let appRem = '';
     if (logs && logs.length > 0) {
       const latestLog = logs[logs.length - 1];
       if (latestLog && latestLog.remark) {
-        appRem = latestLog.remark;
+        appRem = String(latestLog.remark || '');
       }
     }
 
+    const cleanHOD = String(HODEmployeeId || 'HOD201').trim().substring(0, 6);
+
     const [result] = await db.execute(
-      'UPDATE vehreq SET APPFLG = ?, APPBY = ?, APPREM = ? WHERE REQNO = ?',
-      [appFlg, HODEmployeeId, appRem, reqNo]
+      'UPDATE vechreq SET APPFLG = ?, APPBY = ?, APPREM = ? WHERE REQNO = ?',
+      [appFlg, cleanHOD, appRem.substring(0, 80), reqNo]
     );
     return result.affectedRows > 0;
   }
@@ -540,32 +619,32 @@ class Request {
    * @param {Array} logs 
    * @returns {boolean}
    */
-  static async updateAllocation(id, status, vehicleNo, driverName, assignedBy, logs, special_approval, deduction_amount, sms_sent, ded_emp_code) {
+  static async updateAllocation(id, status, vehicleNo, driverName, assignedBy, logs) {
     const reqNo = Request.getReqNo(id);
-    const driMobNo = '9829012345'; // default driver contact
-
-    const spAppFlg = special_approval === 'Y' || special_approval === 'Yes' || special_approval === true ? 'Y' : 'N';
-    const spApp = spAppFlg;
-    const dedAmt = deduction_amount ? parseFloat(deduction_amount) : null;
-    const smsFlg = sms_sent === 'Yes' || sms_sent === 'Y' ? 'Y' : 'N';
-    const dedEmp = ded_emp_code || null;
+    const driMobNo = '9876545432'; // default driver contact
 
     const [result] = await db.execute(
-      'UPDATE vehreq SET VEHNO = ?, DRINAME = ?, DRIMOBNO = ?, GATEFLG = ?, SPAPP = ?, SPAPPFLG = ?, DEDAMT = ?, SMSFLG = ?, SENDSMSFLG = ?, CONSMSFLG = ?, DEDEMPCD = ? WHERE REQNO = ?',
-      [vehicleNo, driverName, driMobNo, 'ASSIGNED', spApp, spAppFlg, dedAmt, smsFlg, smsFlg, smsFlg, dedEmp, reqNo]
+      'UPDATE vechreq SET VEHNO = ?, DRINAME = ?, DRIMOBNO = ?, GATEFLG = ? WHERE REQNO = ?',
+      [
+        (vehicleNo || '').substring(0, 20),
+        (driverName || '').substring(0, 50),
+        driMobNo,
+        'ASSIGNED',
+        reqNo
+      ]
     );
     return result.affectedRows > 0;
   }
 
   /**
-   * Find a draft request for a specific employee
+   * Find a draft request for a specific faculty member
    * @param {string} empId 
    * @returns {Object|null}
    */
   static async findDraftByEmployeeId(empId) {
     const [rows] = await db.execute(`
       SELECT r.*, e.employee_name, e.department 
-      FROM vehreq r 
+      FROM vechreq r 
       LEFT JOIN employees e ON r.REQBY = e.employee_id 
       WHERE r.REQBY = ? AND r.APPFLG = 'DRAFT'
       LIMIT 1
@@ -581,12 +660,13 @@ class Request {
    */
   static async update(reqNo, data) {
     const sql = `
-      UPDATE vehreq SET
+      UPDATE vechreq SET
         LOCATION = ?, REQLOCATION = ?, REQDT = ?, REQTYP = ?,
         FROMDEST = ?, TODEST = ?, FROMDATE = ?, TODATE = ?,
         PICKPOINT = ?, DROPOINT = ?, APPFLG = ?, DETAILS = ?,
         NOPER = ?, MOBNO = ?, FORTHEEMP = ?, VRQ_CATG = ?,
-        VRQ_CATG_DESC = ?, COST_CENTER = ?, FARE_AMOUNT = ?, RETURNFLG = ?
+        VRQ_CATG_DESC = ?, COST_CENTER = ?, FARE_AMOUNT = ?, RETURNFLG = ?,
+        RECREM = ?, GSTNM = ?, GSTCONTMOBNO = ?
       WHERE REQNO = ?
     `;
 
@@ -609,11 +689,14 @@ class Request {
       data.passengers,     // NOPER
       data.mobile_number,  // MOBNO
       data.employee_id,    // FORTHEEMP
-      data.vehicle_category, // VRQ_CATG
-      data.category,       // VRQ_CATG_DESC
+      (data.vehicle_category || '').substring(0, 4), // VRQ_CATG
+      (data.category || '').substring(0, 255),       // VRQ_CATG_DESC
       data.cost_center || '100', // COST_CENTER
       data.cost || 0.00,   // FARE_AMOUNT
       data.return_journey_required ? 1 : 0, // RETURNFLG
+      (data.remarks || '').substring(0, 80), // RECREM
+      (data.guest_name || '').substring(0, 45), // GSTNM
+      (data.guest_mobile || '').substring(0, 13), // GSTCONTMOBNO
       reqNo
     ];
 
@@ -629,7 +712,7 @@ class Request {
   static async findByFilters(filters) {
     let sql = `
       SELECT r.*, e.employee_name, e.department, a.assigned_by, a.assigned_at
-      FROM vehreq r 
+      FROM vechreq r 
       LEFT JOIN employees e ON r.REQBY = e.employee_id 
       LEFT JOIN vehicle_allocations a ON r.REQNO = a.REQNO
       WHERE 1=1
@@ -643,10 +726,6 @@ class Request {
     if (filters.to_date) {
       sql += ' AND r.REQDT <= ?';
       params.push(filters.to_date + ' 23:59:59');
-    }
-    if (filters.plant_location) {
-      sql += ' AND r.LOCATION = ?';
-      params.push(filters.plant_location);
     }
     if (filters.department) {
       sql += ' AND e.department LIKE ?';
@@ -667,15 +746,21 @@ class Request {
     if (filters.status) {
       if (filters.status === 'Draft') {
         sql += " AND r.APPFLG = 'DRAFT'";
-      } else if (filters.status === 'REJECTED') {
+      } else if (filters.status === 'REJECTED' || filters.status === 'HOD Rejected') {
         sql += " AND r.APPFLG = 'REJECTED'";
-      } else if (filters.status === 'TRIP COMPLETED') {
+      } else if (filters.status === 'Cancelled') {
+        sql += " AND r.APPFLG = 'CANCELLED'";
+      } else if (filters.status === 'TRIP COMPLETED' || filters.status === 'Trip Completed') {
         sql += " AND r.GATEFLG = 'COMPLETED'";
-      } else if (filters.status === 'VEHICLE ASSIGNED') {
+      } else if (filters.status === 'VEHICLE ASSIGNED' || filters.status === 'Vehicle Assigned') {
         sql += " AND r.GATEFLG = 'ASSIGNED'";
-      } else if (filters.status === 'HOD APPROVED') {
-        sql += " AND r.APPFLG = 'APPROVED' AND (r.GATEFLG IS NULL OR (r.GATEFLG != 'ASSIGNED' AND r.GATEFLG != 'COMPLETED'))";
-      } else if (filters.status === 'REQUEST SUBMITTED') {
+      } else if (filters.status === 'Driver Assigned') {
+        sql += " AND r.GATEFLG = 'DRIVER_ASSIGNED'";
+      } else if (filters.status === 'Trip Started') {
+        sql += " AND r.GATEFLG = 'STARTED'";
+      } else if (filters.status === 'HOD APPROVED' || filters.status === 'HOD Approved') {
+        sql += " AND r.APPFLG = 'APPROVED' AND (r.GATEFLG IS NULL OR (r.GATEFLG != 'ASSIGNED' AND r.GATEFLG != 'DRIVER_ASSIGNED' AND r.GATEFLG != 'STARTED' AND r.GATEFLG != 'COMPLETED'))";
+      } else if (filters.status === 'REQUEST SUBMITTED' || filters.status === 'Pending HOD Approval') {
         sql += " AND r.APPFLG = 'PENDING'";
       }
     }

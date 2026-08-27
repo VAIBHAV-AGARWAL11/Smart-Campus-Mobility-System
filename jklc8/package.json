@@ -1,0 +1,11 @@
+{
+  "name": "bennett-transport-management",
+  "version": "1.0.0",
+  "description": "Bennett University Campus Transport Management System",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "cd backend && node server.js",
+    "init-db": "cd backend && node init_db.js",
+    "dev": "cd backend && node server.js"
+  }
+}

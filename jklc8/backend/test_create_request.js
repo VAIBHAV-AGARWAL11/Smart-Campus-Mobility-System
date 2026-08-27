@@ -4,32 +4,32 @@ const db = require('./db');
 
 async function test() {
   try {
-    const employee = await Employee.findById('EMP101');
+    const employee = await Employee.findById('FAC101');
     console.log('Found employee:', employee);
 
     const data = {
-      employee_id: 'EMP101',
-      plantLocation: 'Sirohi Plant',
+      employee_id: 'FAC101',
+      plantLocation: 'Bennett University',
       journeyType: 'Official Visit',
-      category: 'Govt Officials',
-      purpose: 'Meeting',
-      pickupLoc: 'Office',
-      dropLoc: 'Guest House',
-      fromLoc: 'ABU ROAD',
-      toLoc: 'UDAIPUR',
-      passengers: 1,
-      pickup_date: '2026-06-09',
-      pickup_hour: 15,
+      category: 'Research Visit',
+      purpose: 'AI Conference & Research Presentation',
+      pickupLoc: 'Academic Block B',
+      dropLoc: 'Delhi IIT Gate',
+      fromLoc: 'BENNETT UNIVERSITY',
+      toLoc: 'DELHI',
+      passengers: 2,
+      pickup_date: '2026-08-20',
+      pickup_hour: 9,
       pickup_minute: 0,
       returnJourneyRequired: true,
-      return_date: '2026-06-09',
-      return_hour: 20,
+      return_date: '2026-08-20',
+      return_hour: 18,
       return_minute: 0,
       travellingWithGuest: false,
-      mobile: '9829012345',
+      mobile: '9876501234',
       suggestedCategory: 'Sedan',
-      distance: 25,
-      cost: 300,
+      distance: 55,
+      cost: 440,
       status: 'REQUEST SUBMITTED'
     };
 
@@ -46,8 +46,8 @@ async function test() {
 
     const requestData = {
       employee_id: data.employee_id || null,
-      employee_name: employee.employee_name || null,
-      department: employee.department || null,
+      employee_name: employee ? employee.employee_name : 'Dr. Priya Sharma',
+      department: employee ? employee.department : 'SCSET',
       plant_location: data.plantLocation || null,
       journey_type: data.journeyType || null,
       pickup_point: data.pickupLoc || null,
@@ -60,7 +60,7 @@ async function test() {
       passengers: data.passengers || 1,
       vehicle_category: data.suggestedCategory || null,
       mobile_number: data.mobile || null,
-      remarks: data.remarks || null,
+      remarks: 'Conference presentation luggage',
       status: data.status || 'REQUEST SUBMITTED',
       return_journey_required: returnJourney ? 1 : 0,
       travelling_with_guest: 0,
@@ -81,13 +81,8 @@ async function test() {
     };
 
     console.log('Inserting request data...');
-    const insertId = await Request.create(requestData);
-    console.log('Inserted successfully! ID:', insertId);
-    
-    // Clean up inserted request
-    console.log('Cleaning up...');
-    await db.execute('DELETE FROM vehreq WHERE REQNO = ?', [insertId]);
-    console.log('Cleaned up successfully.');
+    const reqNo = await Request.create(requestData);
+    console.log('Inserted successfully into vechreq! REQNO:', reqNo);
   } catch (error) {
     console.error('CRITICAL ERROR:', error);
   } finally {

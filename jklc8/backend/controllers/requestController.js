@@ -1,5 +1,6 @@
 // backend/controllers/requestController.js
 // Handles vehicle requisition processing, retrieval, and ID generation
+// Bennett University Campus Transport Management System
 
 const Request = require('../models/Request');
 const Employee = require('../models/Employee');
@@ -66,13 +67,44 @@ function formatRequest(row) {
   };
 }
 
+const BENNETT_CATEGORIES = [
+  { sno: '100', descr: 'Industrial Visit' },
+  { sno: '101', descr: 'Hackathon / Technical Competition' },
+  { sno: '102', descr: 'Research Visit' },
+  { sno: '103', descr: 'Conference / Seminar' },
+  { sno: '104', descr: 'Faculty Official Duty' },
+  { sno: '105', descr: 'Placement Drive' },
+  { sno: '106', descr: 'Guest Pickup / Drop' },
+  { sno: '107', descr: 'Academic Collaboration Visit' },
+  { sno: '108', descr: 'Workshop / FDP' },
+  { sno: '109', descr: 'Club Event' },
+  { sno: '110', descr: 'Cultural Event' },
+  { sno: '111', descr: 'Sports Tournament' },
+  { sno: '112', descr: 'NSS / Social Outreach Program' },
+  { sno: '113', descr: 'Examination Duty' },
+  { sno: '114', descr: 'University Administration Work' },
+  { sno: '115', descr: 'Airport / Railway Station Pickup' },
+  { sno: '116', descr: 'Medical Emergency' },
+  { sno: '117', descr: 'Maintenance & Logistics' },
+  { sno: '118', descr: 'Other Official Purpose' }
+];
+
 exports.getCategories = async (req, res) => {
+  // Respond immediately to prevent any client hanging
+  res.status(200).json(BENNETT_CATEGORIES);
+
+  // Background DB category table sync
   try {
     const [rows] = await db.execute('SELECT * FROM vehicle_type_category ORDER BY sno;');
-    return res.status(200).json(rows);
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    return res.status(500).json({ success: false, message: 'Internal server error.' });
+    const hasLegacy = rows.some(r => r.descr && (r.descr.includes('Govt') || r.descr.includes('Ladies') || r.descr.includes('CSR') || r.descr.includes('Banas') || r.descr.includes('HO Employees')));
+    if (rows.length === 0 || hasLegacy) {
+      await db.execute('DELETE FROM vehicle_type_category;');
+      for (const cat of BENNETT_CATEGORIES) {
+        await db.execute('INSERT INTO vehicle_type_category (sno, descr) VALUES (?, ?);', [cat.sno, cat.descr]);
+      }
+    }
+  } catch (e) {
+    // Non-blocking catch
   }
 };
 
@@ -81,12 +113,13 @@ exports.createRequest = async (req, res) => {
   let employee = null;
   let data = null;
   try {
+    console.log('Incoming Form Payload (req.body):', req.body);
     data = req.body;
 
-    // Validate employee exists
+    // Validate user exists
     employee = await Employee.findById(data.employee_id);
     if (!employee) {
-      return res.status(404).json({ success: false, message: 'Employee not found.' });
+      return res.status(404).json({ success: false, message: 'Faculty not found.' });
     }
 
     // Construct consolidated DATETIME fields
@@ -177,20 +210,62 @@ exports.createRequest = async (req, res) => {
     }
     const createdRequest = await Request.findById(reqNo);
 
+    // Audit Trail: Log REQUEST_SUBMITTED
+    if (data.status !== 'Draft') {
+      const authEmpId = req.headers['x-employee-id'] || data.employee_id;
+      const actualReqNo = Request.getReqNo(reqNo);
+      await db.execute(
+        'INSERT INTO request_history (REQNO, action, performed_by, performed_at) VALUES (?, ?, ?, NOW())',
+        [actualReqNo, 'REQUEST_SUBMITTED', authEmpId]
+      );
+    }
+
     return res.status(201).json({
       success: true,
-      message: data.status === 'Draft' ? 'Draft requisition saved successfully.' : 'Request submitted successfully.',
+      message: data.status === 'Draft' ? 'Draft requisition saved successfully.' : 'Vehicle request submitted successfully',
+      requestNo: reqNo,
       request: formatRequest(createdRequest)
     });
   } catch (error) {
-    console.error('Error creating request:', error);
+    console.error('Database insertion failed:', error);
     try {
       const logContent = `${new Date().toISOString()}\nError: ${error.message}\nStack: ${error.stack}\nData Sent: ${JSON.stringify(data, null, 2)}\nEmployee: ${JSON.stringify(employee, null, 2)}\nRequest Data: ${JSON.stringify(requestData || {}, null, 2)}\n`;
       require('fs').writeFileSync(require('path').join(__dirname, '../../error.log'), logContent);
     } catch (e) {
       console.error('Failed to write error log file:', e);
     }
-    return res.status(500).json({ success: false, message: 'Internal server error: ' + error.message });
+    return res.status(500).json({ success: false, message: 'Database insertion failed: ' + error.message });
+  }
+};
+
+exports.cancelRequest = async (req, res) => {
+  try {
+    const { request_id } = req.body;
+    let requestId = request_id;
+    if (typeof request_id === 'string') {
+      if (request_id.startsWith('REQ-')) {
+        const parts = request_id.split('-');
+        requestId = parseInt(parts[parts.length - 1], 10);
+      } else if (/^20\d{2}\d{3,}$/.test(request_id)) {
+        requestId = parseInt(request_id.substring(4), 10);
+      } else if (/^\d+$/.test(request_id)) {
+        requestId = parseInt(request_id, 10);
+      }
+    }
+
+    if (!requestId) {
+      return res.status(400).json({ success: false, message: 'request_id is required.' });
+    }
+
+    const success = await Request.cancelRequest(requestId);
+    if (success) {
+      return res.status(200).json({ success: true, message: 'Request cancelled successfully.' });
+    } else {
+      return res.status(400).json({ success: false, message: 'Cannot cancel — request may already be approved or cancelled.' });
+    }
+  } catch (error) {
+    console.error('Error cancelling request:', error);
+    return res.status(500).json({ success: false, message: 'Internal server error.' });
   }
 };
 
@@ -199,7 +274,7 @@ exports.getMyRequests = async (req, res) => {
     const employeeId = req.headers['x-employee-id'] || req.query.employeeId || req.query.employee_id;
 
     if (!employeeId) {
-      return res.status(400).json({ success: false, message: 'Employee ID is required.' });
+      return res.status(400).json({ success: false, message: 'User ID is required.' });
     }
 
     const rows = await Request.findByEmployeeId(employeeId);
@@ -207,7 +282,7 @@ exports.getMyRequests = async (req, res) => {
 
     return res.status(200).json(formatted);
   } catch (error) {
-    console.error('Error fetching employee requests:', error);
+    console.error('Error fetching requests:', error);
     return res.status(500).json({ success: false, message: 'Internal server error.' });
   }
 };
@@ -244,13 +319,11 @@ exports.getRequestById = async (req, res) => {
 
 exports.getNextRequestId = async (req, res) => {
   try {
-    const nextId = await Request.getNextId();
-    const currentYear = new Date().getFullYear();
-    const formattedNum = `${currentYear}${String(nextId).padStart(3, '0')}`;
-    return res.status(200).json({ next_id: nextId, formattedNum });
+    const reqNo = await Request.getNextReqNo();
+    return res.status(200).json({ success: true, requestNo: reqNo, formattedNum: reqNo, next_id: reqNo });
   } catch (error) {
     console.error('Error getting next ID:', error);
-    return res.status(500).json({ success: false, message: 'Internal server error.' });
+    return res.status(500).json({ success: false, message: 'Request number generation failed: ' + error.message });
   }
 };
 
@@ -259,11 +332,8 @@ exports.previewReport = async (req, res) => {
     const filters = {
       from_date: req.query.from_date,
       to_date: req.query.to_date,
-      plant_location: req.query.plant_location || null,
       department: req.query.department || null,
-      journey_type: req.query.journey_type || null,
       vehicle_category: req.query.vehicle_category || null,
-      status: req.query.status || null,
       employee_id: req.query.employee_id || null
     };
 
@@ -284,11 +354,8 @@ exports.exportReport = async (req, res) => {
     const filters = {
       from_date: req.query.from_date,
       to_date: req.query.to_date,
-      plant_location: req.query.plant_location || null,
       department: req.query.department || null,
-      journey_type: req.query.journey_type || null,
       vehicle_category: req.query.vehicle_category || null,
-      status: req.query.status || null,
       employee_id: req.query.employee_id || null
     };
 
@@ -338,7 +405,7 @@ function buildExcelXML(records, filters) {
  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
  xmlns:html="http://www.w3.org/TR/REC-html40">
   <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
-    <Author>JK Lakshmi Vehicle Portal</Author>
+    <Author>Bennett University Transport Management</Author>
     <Created>${new Date().toISOString()}</Created>
   </DocumentProperties>
   <Styles>
@@ -392,8 +459,8 @@ function buildExcelXML(records, filters) {
     <Table>`;
 
   const headers = [
-    "Requisition Number (REQ No.)", "Request Date (REQ Date)", "Employee ID", "Employee Name", "Department",
-    "Mobile Number", "Plant / Office", "Journey Type", "Vehicle Category", "Purpose of Request",
+    "Requisition Number (REQ No.)", "Request Date (REQ Date)", "Faculty ID", "Faculty Name", "Department",
+    "Mobile Number", "Journey Type", "Vehicle Category", "Purpose of Request",
     "Pickup Location", "Drop Location", "Pickup Date", "Pickup Time", "Return Date",
     "Return Time", "Passenger Count", "Guest Name", "Guest Mobile", "Request Remarks",
     "Request Status", "Allocation Status", "Assigned Vehicle Number", "Assigned Driver",
@@ -440,7 +507,6 @@ function buildExcelXML(records, filters) {
       r.employee_name || '',
       r.department || '',
       r.mobile_number || '',
-      r.plant_location || '',
       r.journey_type || '',
       r.category || '',
       r.purpose || '',
@@ -480,7 +546,7 @@ function buildExcelXML(records, filters) {
   });
 
   xml += `\n      <Row ss:Height="24">
-        <Cell ss:StyleID="Title"><Data ss:Type="String">JK Lakshmi Cement - Vehicle Requisition Report</Data></Cell>
+        <Cell ss:StyleID="Title"><Data ss:Type="String">Bennett University - Campus Transport Report</Data></Cell>
       </Row>
       <Row ss:Height="15"/>`;
 
