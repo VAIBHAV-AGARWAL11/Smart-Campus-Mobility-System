@@ -1,6 +1,6 @@
-# 🚗 Smart Campus Mobility System
+#  Smart Campus Mobility System
 
-## 📌 Overview
+##  Overview
 
 **Smart Campus Mobility System** is a centralized transportation platform developed for **Bennett University faculty and staff**. The system is designed to simplify and streamline transportation requests for official university-related work and travel.
 
@@ -8,7 +8,7 @@ Faculty and staff may need to travel to different locations for meetings, events
 
 ---
 
-## 🎯 Objectives
+##  Objectives
 
 - Simplify official transportation requests for faculty and staff.
 - Centralize travel and vehicle-related information.
@@ -19,16 +19,16 @@ Faculty and staff may need to travel to different locations for meetings, events
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
-### 👤 Faculty & Staff
+###  Faculty & Staff
 - Submit transportation requests.
 - Provide travel date, time, destination, and purpose.
 - View request status.
 - Track assigned transportation details.
 - Access previous travel/request records.
 
-### 🚘 Transport Administration
+###  Transport Administration
 - View and manage transportation requests.
 - Assign suitable vehicles and drivers.
 - Manage trip schedules.
@@ -36,7 +36,7 @@ Faculty and staff may need to travel to different locations for meetings, events
 - Monitor ongoing and completed trips.
 - Maintain transportation records.
 
-### 📊 Centralized Information
+###  Centralized Information
 - Employee/faculty details
 - Vehicle information
 - Driver information
@@ -47,7 +47,7 @@ Faculty and staff may need to travel to different locations for meetings, events
 
 ---
 
-## 🔄 System Workflow
+##  System Workflow
 
 ```text
 Faculty / Staff
